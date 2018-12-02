@@ -51,7 +51,15 @@ func AddArticle(c *gin.Context) {
 }
 
 func GetArticleList(c *gin.Context) {
-	articles, err := models.ReadArticleList()
+	title := c.Query("title")
+	categoryId := c.Query("category_id")
+	tagId := c.Query("tag_id")
+	createdStartAt := c.Query("created_start_at")
+	createdEndAt := c.Query("created_end_at")
+	updatedStartAt := c.Query("updated_start_at")
+	updatedEndAt := c.Query("updated_end_at")
+
+	articles, err := models.ReadArticleList(title, categoryId, tagId, createdStartAt, createdEndAt, updatedStartAt, updatedEndAt)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"code":    StatusFail,
@@ -65,7 +73,7 @@ func GetArticleList(c *gin.Context) {
 	out := make([]map[string]interface{}, 0, 10)
 
 	for _, article := range articles {
-		var tags []map[string]interface{}
+		tags := make([]map[string]interface{}, 0)
 		for _, tag := range article.Tags {
 			tags = append(tags, map[string]interface{}{
 				"id":   tag.ID,
@@ -74,8 +82,8 @@ func GetArticleList(c *gin.Context) {
 		}
 		m = map[string]interface{}{
 			"id":            article.ID,
-			"created_at":    article.CreatedAt,
-			"updated_at":    article.UpdatedAt,
+			"created_at":    article.CreatedAt.Format("2006-01-02 15:04:05"),
+			"updated_at":    article.UpdatedAt.Format("2006-01-02 15:04:05"),
 			"desc":          article.Desc,
 			"title":         article.Title,
 			"category_id":   article.CategoryID,

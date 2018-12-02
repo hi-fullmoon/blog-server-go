@@ -200,8 +200,33 @@ func CreateArticle(categoryId uint, title, desc, content string, tagIds []uint) 
 }
 
 // read article list
-func ReadArticleList() ([]*Article, error) {
+func ReadArticleList(title, categoryId, tagId, createdStartAt, createdEndAt, updatedStartAt, updatedEndAt string) ([]*Article, error) {
 	var articles []*Article
+	db := db
+	if tagId != "" {
+		db = db.Table("tags").
+			Select("articles.*").
+			Joins("INNER JOIN article_tags ON tags.id = article_tags.tag_id").
+			Joins("INNER JOIN articles ON article_tags.article_id = articles.id").
+			Where("tags.id = ? AND articles.deleted_at IS NULL", tagId)
+	}
+
+	if title != "" {
+		db = db.Where("articles.title = ?", title)
+	}
+
+	if categoryId != "" {
+		db = db.Where("articles.category_id = ?", categoryId)
+	}
+
+	if createdStartAt != "" && createdEndAt != "" {
+		db = db.Where("articles.created_at BETWEEN ? AND ?", createdStartAt, createdEndAt)
+	}
+
+	if updatedStartAt != "" && updatedEndAt != "" {
+		db = db.Where("articles.updated_at BETWEEN ? AND ?", updatedStartAt, updatedEndAt)
+	}
+
 	if err = db.Preload("Category").Preload("Tags").Find(&articles).Error; err != nil {
 		return []*Article{}, err
 	}

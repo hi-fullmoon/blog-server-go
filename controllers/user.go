@@ -3,6 +3,7 @@ package controllers
 import (
 	"net/http"
 	"zhengbiwen/blog_management_system/models"
+	"zhengbiwen/blog_management_system/session"
 
 	"github.com/gin-gonic/gin"
 )
@@ -35,9 +36,20 @@ func Login(c *gin.Context) {
 		return
 	}
 
+	token := session.GenerateNewSessionId(user.Username)
+
+	if token == "" {
+		c.JSON(http.StatusOK, gin.H{
+			"code":    StatusFail,
+			"message": "生成token失败",
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    StatusSuccess,
 		"message": "登录成功",
+		"token":   token,
 	})
 	return
 }

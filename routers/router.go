@@ -13,6 +13,8 @@ func InitRouter() *gin.Engine {
 	{
 		api.POST("/user/login", controllers.Login)
 
+		//api.Use(controllers.ValidateUserSession())
+
 		api.GET("/categories", controllers.GetCategoryList)
 		api.POST("/category", controllers.AddCategory)
 		api.DELETE("/category/:cid", controllers.DeleteCategory)

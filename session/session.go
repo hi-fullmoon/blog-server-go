@@ -1,6 +1,7 @@
 package session
 
 import (
+	"fmt"
 	"sync"
 	"time"
 	"zhengbiwen/blog_management_system/models"
@@ -17,6 +18,8 @@ var sessionMap *sync.Map
 
 func init() {
 	sessionMap = &sync.Map{}
+
+	//LoadSessionsFromDB()
 }
 
 func nowInMilli() int64 {
@@ -40,12 +43,14 @@ func GenerateNewSessionId(uname string) string {
 	sid, _ := uuid.NewV4()
 	sidStr := sid.String()
 	ct := nowInMilli()
-	ttl := ct + 30*60*1000
+	ttl := ct + 1*60*1000
 
-	err := models.CreateSession(sidStr, ttl, uname)
+	se, err := models.CreateSession(sidStr, ttl, uname)
 	if err != nil {
 		return ""
 	}
+	sessionMap.Store(sidStr, se)
+
 	return sidStr
 }
 
@@ -61,13 +66,13 @@ func IsSessionExpired(sid string) (string, bool) {
 	if s, ok := sessionMap.Load(sid); ok {
 		ct := nowInMilli()
 		if s.(*models.Session).TTL < ct {
-			if err := deleteIsExpiredSession(sid); err != nil {
-				return "", true
-			}
+			deleteIsExpiredSession(sid)
 			return "", true
 		}
 
 		return s.(*models.Session).Username, false
 	}
+	s, _ := sessionMap.Load(sid)
+	fmt.Println("sssssssssssssssssss", s)
 	return "", true
 }

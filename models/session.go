@@ -1,20 +1,41 @@
 package models
 
-import "sync"
+import (
+	"fmt"
+	"sync"
+)
 
-func CreateSession(sid string, ttl int64, uname string) error {
+// read sessions
+func ReadAllSessions() (*sync.Map, error) {
+	var sessions []Session
+
+	if err = db.Find(&sessions).Error; err != nil {
+		return nil, err
+	}
+
+	fmt.Println(sessions)
+
+	var m *sync.Map
+	for _, session := range sessions {
+		m.Store(session.SessionID, 1)
+	}
+
+	return m, nil
+}
+
+func CreateSession(sid string, ttl int64, username string) (*Session, error) {
 	var se Session
 	se = Session{
 		SessionID: sid,
 		TTL:       ttl,
-		Username:  uname,
+		Username:  username,
 	}
 
 	if err := db.Create(&se).Error; err != nil {
-		return err
+		return &se, err
 	}
 
-	return nil
+	return &se, nil
 }
 
 func ReadSession(sid string) (*Session, error) {
@@ -23,19 +44,6 @@ func ReadSession(sid string) (*Session, error) {
 		return &Session{}, err
 	}
 	return &se, nil
-}
-
-func ReadAllSessions() (*sync.Map, error) {
-	var ses []*Session
-	if err := db.Find(&ses).Error; err != nil {
-		return nil, nil
-	}
-
-	var m *sync.Map
-	for _, item := range ses {
-		m.Store(item.SessionID, item)
-	}
-	return m, nil
 }
 
 func DeleteSession(sid string) error {
