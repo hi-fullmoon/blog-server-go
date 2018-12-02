@@ -1,8 +1,9 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
+	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -10,18 +11,18 @@ import (
 func UploadImg(c *gin.Context) {
 	file, err := c.FormFile("file")
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"code":    http.StatusBadRequest,
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    StatusFail,
 			"message": "a bad request",
 		})
 	}
 
-	filename := file.Filename
-	fmt.Println("filename------>", filename)
+	timeNow := time.Now().UnixNano()
+	timeNowStr := strconv.FormatInt(timeNow, 10)
 
-	if err := c.SaveUploadedFile(file, "upload/images/"+filename); err != nil {
+	if err := c.SaveUploadedFile(file, "upload/images/"+timeNowStr+".jpg"); err != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"code":    http.StatusBadRequest,
+			"code":    StatusFail,
 			"message": err.Error(),
 		})
 	}
@@ -30,7 +31,7 @@ func UploadImg(c *gin.Context) {
 		"code":    StatusSuccess,
 		"message": "上传成功",
 		"data": map[string]string{
-			"img_url": "/upload/images/" + filename,
+			"img_url": "/upload/images/" + timeNowStr + ".jpg",
 		},
 	})
 }

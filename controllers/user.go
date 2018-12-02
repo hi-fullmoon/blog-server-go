@@ -55,8 +55,11 @@ func Login(c *gin.Context) {
 		"code":    StatusSuccess,
 		"message": "登录成功",
 		"data": map[string]interface{}{
-			"token":   token,
-			"user_id": user.ID,
+			"token":        token,
+			"user_id":      res.ID,
+			"nick_name":    res.NickName,
+			"account":      res.Account,
+			"avatar_image": res.AvatarImage,
 		},
 	})
 	return

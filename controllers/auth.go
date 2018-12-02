@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"net/http"
+	"strings"
 	"zhengbiwen/blog_management_system/session"
 
 	"github.com/gin-gonic/gin"
@@ -21,7 +22,9 @@ func ValidateUserSession() gin.HandlerFunc {
 			c.Abort()
 		}
 
-		_, ok := session.IsSessionExpired(token)
+		tokenSlice := strings.Split(token, "_")
+
+		_, ok := session.IsSessionExpired(tokenSlice[1])
 
 		if ok {
 			c.JSON(http.StatusOK, gin.H{

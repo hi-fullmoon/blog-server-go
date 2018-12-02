@@ -74,9 +74,12 @@ func InitDB() (*gorm.DB, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	db.LogMode(true)
+
 	db.DB().SetMaxIdleConns(10)
 	db.DB().SetMaxOpenConns(100)
+
 	db.AutoMigrate(&User{}, &Category{}, &Tag{}, &Article{}, &Session{})
 
 	return db, nil
@@ -130,16 +133,16 @@ func CreateCategory(name, desc string) error {
 // read category list by name
 func ReadCategoryList(name string) ([]*Category, error) {
 	var categories []*Category
+	db := db
 
-	if name == "" {
-		db.Order("created_at DESC").Preload("Articles").Find(&categories)
-	} else {
-		db.Where("name = ?", name).Preload("Articles").Order("created_at DESC").Find(&categories)
+	if name != "" {
+		db = db.Where("name = ?", name)
 	}
 
-	if db.Error != nil {
+	if err = db.Order("created_at DESC").Preload("Articles").Find(&categories).Error; err != nil {
 		return []*Category{}, err
 	}
+
 	return categories, nil
 }
 
@@ -179,16 +182,16 @@ func CreateTag(name string) error {
 // read tags by name
 func ReadTagList(name string) ([]*Tag, error) {
 	var tags []*Tag
+	db := db
 
-	if name == "" {
-		db.Order("created_at DESC").Preload("Articles").Find(&tags)
-	} else {
-		db.Where("name = ?", name).Preload("Articles").Order("created_at DESC").Find(&tags)
+	if name != "" {
+		db = db.Where("name = ?", name)
 	}
 
-	if err = db.Error; err != nil {
+	if err = db.Order("created_at DESC").Preload("Articles").Find(&tags).Error; err != nil {
 		return []*Tag{}, err
 	}
+
 	return tags, nil
 }
 
@@ -227,7 +230,7 @@ func CreateArticle(categoryId uint, title, desc, content string, tagIds []uint) 
 	}
 
 	for _, tagId := range tagIds {
-		if err = db.Exec("insert into article_tags(article_id, tag_id) values(?, ?)", article.ID, tagId).Error; err != nil {
+		if err = db.Exec("INSERT INTO article_tags(article_id, tag_id) VALUES(?, ?)", article.ID, tagId).Error; err != nil {
 			return err
 		}
 	}
@@ -262,7 +265,7 @@ func ReadArticleList(title, categoryId, tagId, createdStartAt, createdEndAt, upd
 		db = db.Where("articles.updated_at BETWEEN ? AND ?", updatedStartAt, updatedEndAt)
 	}
 
-	if err = db.Preload("Category").Preload("Tags").Find(&articles).Error; err != nil {
+	if err = db.Order("updated_at DESC").Preload("Category").Preload("Tags").Find(&articles).Error; err != nil {
 		return []*Article{}, err
 	}
 
@@ -296,7 +299,7 @@ func UpdateArticle(aid, categoryId uint, title, desc, content string, tagIds []u
 		return err
 	}
 	for _, tagId := range tagIds {
-		if err = db.Exec("insert into article_tags(article_id, tag_id) values(?, ?)", aid, tagId).Error; err != nil {
+		if err = db.Exec("INSERT INTO article_tags(article_id, tag_id) VALUES(?, ?)", aid, tagId).Error; err != nil {
 			return err
 		}
 	}
