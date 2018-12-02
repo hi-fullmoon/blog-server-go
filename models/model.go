@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"log"
 )
 
@@ -9,9 +10,16 @@ import _ "github.com/jinzhu/gorm/dialects/mysql"
 
 type User struct {
 	gorm.Model
-	UserID   string
-	Username string
-	Password string
+	Account     string
+	Password    string
+	NickName    string
+	Email       string
+	Province    string
+	City        string
+	County      string
+	Website     string
+	Profile     string `gorm:"size:200"`
+	AvatarImage string `json:"avatar_image"`
 }
 
 type Category struct {
@@ -74,13 +82,40 @@ func InitDB() (*gorm.DB, error) {
 	return db, nil
 }
 
-// get user
-func GetUserInfo(username string) (*User, error) {
+// get user information by username
+func GetUserByAccount(account string) (*User, error) {
 	var user User
-	if err = db.Where("username = ?", username).First(&user).Error; err != nil {
+	if err = db.Where("account = ?", account).First(&user).Error; err != nil {
 		return &user, err
 	}
 	return &user, nil
+}
+
+// get user information by user id
+func GetUserById(id uint) (*User, error) {
+	var user User
+	if err = db.Where("id = ?", id).First(&user).Error; err != nil {
+		return &User{}, err
+	}
+	return &user, nil
+}
+
+// update user information
+func UpdateUserInfo(user *User) error {
+	fmt.Println(*user)
+	if err = db.Model(&User{}).Updates(user).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+// update user password
+func UpdateUserPassword(id uint, pwd string) error {
+	var user User
+	if err = db.Model(&user).Where("id = ?", id).Update("password", pwd).Error; err != nil {
+		return err
+	}
+	return nil
 }
 
 // create category

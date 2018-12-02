@@ -15,7 +15,7 @@ func ValidateUserSession() gin.HandlerFunc {
 
 		if len(token) == 0 {
 			c.JSON(http.StatusOK, gin.H{
-				"code":    statusAuthFail,
+				"code":    StatusAuthFail,
 				"message": "访问失败，重新登录",
 			})
 			c.Abort()
@@ -25,7 +25,7 @@ func ValidateUserSession() gin.HandlerFunc {
 
 		if ok {
 			c.JSON(http.StatusOK, gin.H{
-				"code":    statusAuthFail,
+				"code":    StatusAuthFail,
 				"message": "token失效，重新登录",
 			})
 			c.Abort()

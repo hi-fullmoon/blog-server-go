@@ -1,6 +1,7 @@
 package routers
 
 import (
+	"net/http"
 	"zhengbiwen/blog_management_system/controllers"
 
 	"github.com/gin-gonic/gin"
@@ -9,11 +10,17 @@ import (
 func InitRouter() *gin.Engine {
 	r := gin.Default()
 
+	r.StaticFS("/upload", http.Dir("upload"))
+
 	api := r.Group("/api")
 	{
 		api.POST("/user/login", controllers.Login)
 
 		//api.Use(controllers.ValidateUserSession())
+
+		api.GET("/user/:uid", controllers.GetUser)
+		api.PUT("/user", controllers.UpdateUser)
+		api.POST("/user/password", controllers.UpdateUserPwd)
 
 		api.GET("/categories", controllers.GetCategoryList)
 		api.POST("/category", controllers.AddCategory)
@@ -30,6 +37,8 @@ func InitRouter() *gin.Engine {
 		api.POST("/article", controllers.AddArticle)
 		api.DELETE("/article/:aid", controllers.DeleteArticle)
 		api.PUT("/article", controllers.UpdateArticle)
+
+		api.POST("/upload", controllers.UploadImg)
 	}
 
 	return r
