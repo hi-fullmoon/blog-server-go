@@ -8,6 +8,7 @@ import (
 func main() {
 	db, err := models.InitDB()
 	//session.LoadSessionsFromDB()
+
 	if err != nil {
 		panic(err)
 	}

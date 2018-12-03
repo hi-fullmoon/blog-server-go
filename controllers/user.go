@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 	"zhengbiwen/blog_management_system/models"
@@ -22,8 +21,6 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	fmt.Println("user info", user)
-
 	res, err := models.GetUserByAccount(user.Account)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
@@ -41,7 +38,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	token := session.GenerateNewSessionId(user.Account)
+	token := session.GenerateNewSessionId(res.ID)
 
 	if token == "" {
 		c.JSON(http.StatusOK, gin.H{

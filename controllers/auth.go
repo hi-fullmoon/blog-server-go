@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"net/http"
+	"strconv"
 	"strings"
 	"zhengbiwen/blog_management_system/session"
 
@@ -24,7 +25,16 @@ func ValidateUserSession() gin.HandlerFunc {
 
 		tokenSlice := strings.Split(token, "_")
 
-		_, ok := session.IsSessionExpired(tokenSlice[1])
+		uidStr, err := strconv.ParseUint(tokenSlice[0], 10, 64)
+		if err != nil {
+			c.JSON(http.StatusOK, gin.H{
+				"code":    StatusAuthFail,
+				"message": "访问失败，重新登录",
+			})
+			c.Abort()
+		}
+
+		_, ok := session.IsSessionExpired(uint(uidStr))
 
 		if ok {
 			c.JSON(http.StatusOK, gin.H{

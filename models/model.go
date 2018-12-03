@@ -59,8 +59,7 @@ type Session struct {
 	gorm.Model
 	SessionID string
 	TTL       int64
-	Username  string
-	Password  string
+	UserID    uint
 }
 
 var (

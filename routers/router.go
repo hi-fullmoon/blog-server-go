@@ -16,7 +16,7 @@ func InitRouter() *gin.Engine {
 	{
 		api.POST("/user/login", controllers.Login)
 
-		//api.Use(controllers.ValidateUserSession())
+		api.Use(controllers.ValidateUserSession())
 
 		api.GET("/user/:uid", controllers.GetUser)
 		api.PUT("/user", controllers.UpdateUser)

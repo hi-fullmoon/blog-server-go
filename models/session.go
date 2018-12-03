@@ -1,7 +1,6 @@
 package models
 
 import (
-	"fmt"
 	"sync"
 )
 
@@ -13,42 +12,32 @@ func ReadAllSessions() (*sync.Map, error) {
 		return nil, err
 	}
 
-	fmt.Println(sessions)
-
 	var m *sync.Map
 	for _, session := range sessions {
-		m.Store(session.SessionID, 1)
+		m.Store(session.UserID, session.SessionID)
 	}
 
 	return m, nil
 }
 
-func CreateSession(sid string, ttl int64, username string) (*Session, error) {
-	var se Session
-	se = Session{
+func CreateSession(sid string, ttl int64, uid uint) (*Session, error) {
+	var session Session
+	session = Session{
 		SessionID: sid,
 		TTL:       ttl,
-		Username:  username,
+		UserID:    uid,
 	}
 
-	if err := db.Create(&se).Error; err != nil {
-		return &se, err
+	if err := db.Create(&session).Error; err != nil {
+		return nil, err
 	}
 
-	return &se, nil
+	return &session, nil
 }
 
-func ReadSession(sid string) (*Session, error) {
-	se := Session{}
-	if err := db.Where("session_id = ?", sid).First(&se).Error; err != nil {
-		return &Session{}, err
-	}
-	return &se, nil
-}
-
-func DeleteSession(sid string) error {
+func DeleteSession(uid uint) error {
 	var se Session
-	if err := db.Where("session_id", sid).Delete(&se).Error; err != nil {
+	if err := db.Where("user_id = ?", uid).Unscoped().Delete(&se).Error; err != nil {
 		return err
 	}
 	return nil

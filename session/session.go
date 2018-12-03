@@ -1,7 +1,7 @@
 package session
 
 import (
-	"fmt"
+	"log"
 	"sync"
 	"time"
 	"zhengbiwen/blog_management_system/models"
@@ -18,8 +18,6 @@ var sessionMap *sync.Map
 
 func init() {
 	sessionMap = &sync.Map{}
-
-	//LoadSessionsFromDB()
 }
 
 func nowInMilli() int64 {
@@ -34,45 +32,51 @@ func LoadSessionsFromDB() {
 
 	res.Range(func(key, value interface{}) bool {
 		ss := value.(*models.Session)
-		sessionMap.Store(key, ss)
+		sessionMap.Store(key, ss.SessionID)
 		return true
 	})
 }
 
-func GenerateNewSessionId(uname string) string {
-	sid, _ := uuid.NewV4()
-	sidStr := sid.String()
-	ct := nowInMilli()
-	ttl := ct + 1*60*1000
+func GenerateNewSessionId(uid uint) string {
+	var sessionId string
 
-	se, err := models.CreateSession(sidStr, ttl, uname)
-	if err != nil {
-		return ""
+	if session, ok := sessionMap.Load(uid); ok {
+		sessionId = session.(*models.Session).SessionID
+		log.Println("session id is exist: ", sessionId)
+	} else {
+		sid, _ := uuid.NewV4()
+		sessionId = sid.String()
+
+		ct := nowInMilli()
+		ttl := ct + 1*60*1000
+
+		s, err := models.CreateSession(sessionId, ttl, uid)
+		if err != nil {
+			return ""
+		}
+		sessionMap.Store(uid, s)
 	}
-	sessionMap.Store(sidStr, se)
 
-	return sidStr
+	return sessionId
 }
 
-func deleteIsExpiredSession(sid string) error {
-	if err := models.DeleteSession(sid); err != nil {
-		return err
-	}
-	sessionMap.Delete(sid)
-	return nil
-}
-
-func IsSessionExpired(sid string) (string, bool) {
-	if s, ok := sessionMap.Load(sid); ok {
+func IsSessionExpired(uid uint) (string, bool) {
+	if s, ok := sessionMap.Load(uid); ok {
 		ct := nowInMilli()
 		if s.(*models.Session).TTL < ct {
-			deleteIsExpiredSession(sid)
+			deleteIsExpiredSession(uid)
 			return "", true
 		}
 
-		return s.(*models.Session).Username, false
+		return s.(*models.Session).SessionID, false
 	}
-	s, _ := sessionMap.Load(sid)
-	fmt.Println("sssssssssssssssssss", s)
 	return "", true
+}
+
+func deleteIsExpiredSession(uid uint) error {
+	if err := models.DeleteSession(uid); err != nil {
+		return err
+	}
+	sessionMap.Delete(uid)
+	return nil
 }
