@@ -1,23 +1,13 @@
 package models
 
-import (
-	"sync"
-)
-
 // read sessions
-func ReadAllSessions() (*sync.Map, error) {
-	var sessions []Session
+func ReadAllSessions() ([]*Session, error) {
+	var sessions []*Session
 
 	if err = db.Find(&sessions).Error; err != nil {
 		return nil, err
 	}
-
-	var m *sync.Map
-	for _, session := range sessions {
-		m.Store(session.UserID, session.SessionID)
-	}
-
-	return m, nil
+	return sessions, nil
 }
 
 func CreateSession(sid string, ttl int64, uid uint) (*Session, error) {

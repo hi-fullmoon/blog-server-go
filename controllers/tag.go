@@ -49,8 +49,8 @@ func GetTagList(c *gin.Context) {
 	for _, ca := range tags {
 		m = map[string]interface{}{
 			"id":            ca.ID,
-			"created_at":    ca.CreatedAt,
-			"updated_at":    ca.UpdatedAt,
+			"created_at":    ca.CreatedAt.Format("2006-01-02 15:04:05"),
+			"updated_at":    ca.UpdatedAt.Format("2006-01-02 15:04:05"),
 			"name":          ca.Name,
 			"article_count": len(ca.Articles),
 		}

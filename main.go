@@ -3,11 +3,12 @@ package main
 import (
 	"zhengbiwen/blog_management_system/models"
 	"zhengbiwen/blog_management_system/routers"
+	"zhengbiwen/blog_management_system/session"
 )
 
 func main() {
 	db, err := models.InitDB()
-	//session.LoadSessionsFromDB()
+	session.LoadSessionsFromDB()
 
 	if err != nil {
 		panic(err)

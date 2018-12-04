@@ -25,16 +25,14 @@ func nowInMilli() int64 {
 }
 
 func LoadSessionsFromDB() {
-	res, err := models.ReadAllSessions()
+	sessions, err := models.ReadAllSessions()
 	if err != nil {
 		return
 	}
 
-	res.Range(func(key, value interface{}) bool {
-		ss := value.(*models.Session)
-		sessionMap.Store(key, ss.SessionID)
-		return true
-	})
+	for _, session := range sessions {
+		sessionMap.Store(session.UserID, session)
+	}
 }
 
 func GenerateNewSessionId(uid uint) string {
@@ -48,7 +46,7 @@ func GenerateNewSessionId(uid uint) string {
 		sessionId = sid.String()
 
 		ct := nowInMilli()
-		ttl := ct + 1*60*1000
+		ttl := ct + 30*60*1000
 
 		s, err := models.CreateSession(sessionId, ttl, uid)
 		if err != nil {
