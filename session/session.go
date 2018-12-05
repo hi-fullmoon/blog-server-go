@@ -46,7 +46,7 @@ func GenerateNewSessionId(uid uint) string {
 		sessionId = sid.String()
 
 		ct := nowInMilli()
-		ttl := ct + 30*60*1000
+		ttl := ct + 60*60*1000
 
 		s, err := models.CreateSession(sessionId, ttl, uid)
 		if err != nil {

@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"log"
 	"net/http"
 	"strconv"
 	"zhengbiwen/blog_management_system/models"
@@ -52,14 +51,30 @@ func AddArticle(c *gin.Context) {
 
 func GetArticleList(c *gin.Context) {
 	title := c.Query("title")
-	categoryId := c.Query("category_id")
-	tagId := c.Query("tag_id")
-	createdStartAt := c.Query("created_start_at")
-	createdEndAt := c.Query("created_end_at")
-	updatedStartAt := c.Query("updated_start_at")
-	updatedEndAt := c.Query("updated_end_at")
+	cid := c.Query("category_id")
+	tid := c.Query("tag_id")
+	cStartAt := c.Query("created_start_at")
+	cEndAt := c.Query("created_end_at")
+	uStartAt := c.Query("updated_start_at")
+	uEndAt := c.Query("updated_end_at")
+	pageSize := c.Query("page_size")
+	pageNum := c.Query("page_num")
 
-	articles, err := models.ReadArticleList(title, categoryId, tagId, createdStartAt, createdEndAt, updatedStartAt, updatedEndAt)
+	cidUint64, _ := strconv.ParseUint(cid, 10, 64)
+	tidUint64, _ := strconv.ParseUint(tid, 10, 64)
+
+	pageSizeInt, err := strconv.Atoi(pageSize)
+	if err != nil {
+		pageSizeInt = 10
+	}
+	pageNumInt, err := strconv.Atoi(pageNum)
+	if err != nil {
+		pageNumInt = 1
+	}
+
+	articles, total, err := models.ReadArticleList(title, cStartAt, cEndAt, uStartAt, uEndAt,
+		uint(cidUint64), uint(tidUint64),
+		pageSizeInt, pageNumInt)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"code":    StatusFail,
@@ -96,7 +111,12 @@ func GetArticleList(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"code":    StatusSuccess,
 		"message": "获取文章列表成功",
-		"data":    out,
+		"data": map[string]interface{}{
+			"list":      out,
+			"total":     total,
+			"page_num":  pageNumInt,
+			"page_size": pageSizeInt,
+		},
 	})
 }
 
@@ -176,7 +196,6 @@ func UpdateArticle(c *gin.Context) {
 	var err error
 
 	if err = c.ShouldBindJSON(&article); err != nil {
-		log.Fatal("xxxxx", err)
 		c.JSON(http.StatusOK, gin.H{
 			"code":    StatusFail,
 			"message": "参数有误",

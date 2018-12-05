@@ -237,10 +237,12 @@ func CreateArticle(categoryId uint, title, desc, content string, tagIds []uint) 
 }
 
 // read article list
-func ReadArticleList(title, categoryId, tagId, createdStartAt, createdEndAt, updatedStartAt, updatedEndAt string) ([]*Article, error) {
+func ReadArticleList(title, createdStartAt, createdEndAt, updatedStartAt, updatedEndAt string,
+	categoryId, tagId uint,
+	pageSize, pageNum int) ([]*Article, int, error) {
 	var articles []*Article
 	db := db
-	if tagId != "" {
+	if tagId != 0 {
 		db = db.Table("tags").
 			Select("articles.*").
 			Joins("INNER JOIN article_tags ON tags.id = article_tags.tag_id").
@@ -252,7 +254,7 @@ func ReadArticleList(title, categoryId, tagId, createdStartAt, createdEndAt, upd
 		db = db.Where("articles.title = ?", title)
 	}
 
-	if categoryId != "" {
+	if categoryId != 0 {
 		db = db.Where("articles.category_id = ?", categoryId)
 	}
 
@@ -264,11 +266,25 @@ func ReadArticleList(title, categoryId, tagId, createdStartAt, createdEndAt, upd
 		db = db.Where("articles.updated_at BETWEEN ? AND ?", updatedStartAt, updatedEndAt)
 	}
 
-	if err = db.Order("updated_at DESC").Preload("Category").Preload("Tags").Find(&articles).Error; err != nil {
-		return []*Article{}, err
+	if pageSize == 0 {
+		pageSize = 10
+	}
+	if pageNum == 0 {
+		pageNum = 1
+	}
+	offset := pageSize * (pageNum - 1)
+
+	db = db.Preload("Category").Preload("Tags").Order("updated_at DESC").
+		Limit(pageSize).Offset(offset).Find(&articles)
+
+	var pageTotal int
+	db = db.Limit(-1).Count(&pageTotal)
+
+	if err = db.Error; err != nil {
+		return []*Article{}, 0, err
 	}
 
-	return articles, nil
+	return articles, pageTotal, nil
 }
 
 // read article information by aid
