@@ -35,7 +35,19 @@ func AddTag(c *gin.Context) {
 
 func GetTagList(c *gin.Context) {
 	name := c.Query("name")
-	tags, err := models.ReadTagList(name)
+	pageSize := c.Query("page_size")
+	pageNum := c.Query("page_num")
+
+	pageSizeInt, err := strconv.Atoi(pageSize)
+	if err != nil {
+		pageSizeInt = 10
+	}
+	pageNumInt, err := strconv.Atoi(pageNum)
+	if err != nil {
+		pageNumInt = 1
+	}
+
+	tags, total, err := models.ReadTagList(name, pageSizeInt, pageNumInt)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"code":    StatusFail,
@@ -60,7 +72,12 @@ func GetTagList(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"code":    StatusSuccess,
 		"message": "获取标签列表成功",
-		"data":    out,
+		"data": map[string]interface{}{
+			"list":      out,
+			"total":     total,
+			"page_num":  pageNumInt,
+			"page_size": pageSizeInt,
+		},
 	})
 }
 

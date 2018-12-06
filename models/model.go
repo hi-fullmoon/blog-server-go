@@ -179,7 +179,7 @@ func CreateTag(name string) error {
 }
 
 // read tags by name
-func ReadTagList(name string) ([]*Tag, error) {
+func ReadTagList(name string, pageSize, pageNum int) ([]*Tag, int, error) {
 	var tags []*Tag
 	db := db
 
@@ -187,11 +187,23 @@ func ReadTagList(name string) ([]*Tag, error) {
 		db = db.Where("name = ?", name)
 	}
 
-	if err = db.Order("created_at DESC").Preload("Articles").Find(&tags).Error; err != nil {
-		return []*Tag{}, err
+	if pageSize == 0 {
+		pageSize = 10
+	}
+	if pageNum == 0 {
+		pageNum = 1
+	}
+	offset := pageSize * (pageNum - 1)
+	db = db.Limit(pageSize).Offset(offset).Preload("Articles").Order("created_at DESC").Find(&tags)
+
+	var pageTotal int
+	db = db.Limit(-1).Count(&pageTotal)
+
+	if err = db.Error; err != nil {
+		return []*Tag{}, 0, err
 	}
 
-	return tags, nil
+	return tags, pageTotal, nil
 }
 
 // update tags

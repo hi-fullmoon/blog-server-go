@@ -21,6 +21,7 @@ func ValidateUserSession() gin.HandlerFunc {
 				"message": "访问失败，重新登录",
 			})
 			c.Abort()
+			return
 		}
 
 		tokenSlice := strings.Split(token, "_")
@@ -32,6 +33,7 @@ func ValidateUserSession() gin.HandlerFunc {
 				"message": "访问失败，重新登录",
 			})
 			c.Abort()
+			return
 		}
 
 		_, ok := session.IsSessionExpired(uint(uidStr))
