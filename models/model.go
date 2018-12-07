@@ -135,7 +135,7 @@ func ReadCategoryList(name string) ([]*Category, error) {
 	db := db
 
 	if name != "" {
-		db = db.Where("name = ?", name)
+		db = db.Where("name LIKE ?", "%"+name+"%")
 	}
 
 	if err = db.Order("created_at DESC").Preload("Articles").Find(&categories).Error; err != nil {
@@ -184,7 +184,7 @@ func ReadTagList(name string, pageSize, pageNum int) ([]*Tag, int, error) {
 	db := db
 
 	if name != "" {
-		db = db.Where("name = ?", name)
+		db = db.Where("name LIKE ?", "%"+name+"%")
 	}
 
 	if pageSize == 0 {
@@ -220,6 +220,9 @@ func UpdateTag(id uint, name string) error {
 func DeleteTag(id uint) error {
 	var tag Tag
 	if err = db.Where("id = ?", id).Delete(&tag).Error; err != nil {
+		return err
+	}
+	if err = db.Exec("DELETE FROM article_tags WHERE tag_id = ?", id).Error; err != nil {
 		return err
 	}
 	return nil
@@ -263,7 +266,7 @@ func ReadArticleList(title, createdStartAt, createdEndAt, updatedStartAt, update
 	}
 
 	if title != "" {
-		db = db.Where("articles.title = ?", title)
+		db = db.Where("articles.title LIKE ?", "%"+title+"%")
 	}
 
 	if categoryId != 0 {
@@ -286,7 +289,7 @@ func ReadArticleList(title, createdStartAt, createdEndAt, updatedStartAt, update
 	}
 	offset := pageSize * (pageNum - 1)
 
-	db = db.Preload("Category").Preload("Tags").Order("updated_at DESC").
+	db = db.Preload("Category").Preload("Tags").Order("created_at DESC").
 		Limit(pageSize).Offset(offset).Find(&articles)
 
 	var pageTotal int
