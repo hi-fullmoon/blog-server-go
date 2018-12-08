@@ -1,7 +1,6 @@
 package models
 
 import (
-	"fmt"
 	"log"
 )
 
@@ -104,7 +103,6 @@ func GetUserById(id uint) (*User, error) {
 
 // update user information
 func UpdateUserInfo(user *User) error {
-	fmt.Println(*user)
 	if err = db.Model(&User{}).Updates(user).Error; err != nil {
 		return err
 	}
