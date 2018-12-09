@@ -1,0 +1,57 @@
+/* common
+---------------------------------------------- */
+.br-6 {
+    border-radius: 6px;
+}
+
+
+
+html, body, .main-container {
+    height: 100%;
+}
+body {
+    background: aliceblue;
+}
+
+.main-container {
+    max-width: 1120px;
+    margin: 0 auto;
+}
+
+.main-sidebar {
+    position: fixed;
+    top: 80px;
+    width: 200px;
+    padding: 10px 0;
+    background: #fff;
+}
+.main-sidebar .avatar {
+    width: 90px;
+    height: 90px;
+    margin: 0 auto;
+    border-radius: 45px;
+    overflow: hidden;
+}
+.main-sidebar .avatar img {
+    width: 100%;
+    height: 100%;
+}
+.main-sidebar .username {
+    width: 100%;
+    margin-top: 10px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+}
+.main-sidebar .in-a-word {
+    font-size: 12px;
+    padding: 0 10px;
+    margin-top: 10px;
+    text-indent: 2em;
+}
+
+.main-content {
+    padding-left: 210px;
+    width: 100%;
+    background: #fff;
+}

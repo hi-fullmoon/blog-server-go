@@ -11,34 +11,39 @@ func InitRouter() *gin.Engine {
 	r := gin.Default()
 
 	r.StaticFS("/upload", http.Dir("upload"))
+	r.StaticFS("/static", http.Dir("static"))
 
-	api := r.Group("/api")
+	r.LoadHTMLGlob("views/*/*")
+
+	r.GET("/", controllers.Home)
+
+	api := r.Group("/v1/api")
 	{
-		api.POST("/user/login", controllers.Login)
+		api.POST("/admin/user/login", controllers.Login)
 
 		api.Use(controllers.ValidateUserSession())
 
-		api.GET("/user/:uid", controllers.GetUser)
-		api.PUT("/user", controllers.UpdateUser)
-		api.POST("/user/password", controllers.UpdateUserPwd)
+		api.GET("/admin/user/:uid", controllers.GetUser)
+		api.PUT("/admin/user", controllers.UpdateUser)
+		api.POST("/admin/user/password", controllers.UpdateUserPwd)
 
-		api.GET("/categories", controllers.GetCategoryList)
-		api.POST("/category", controllers.AddCategory)
-		api.DELETE("/category/:cid", controllers.DeleteCategory)
-		api.PUT("/category", controllers.UpdateCategory)
+		api.GET("/admin/categories", controllers.GetCategoryList)
+		api.POST("/admin/category", controllers.AddCategory)
+		api.DELETE("/admin/category/:cid", controllers.DeleteCategory)
+		api.PUT("/admin/category", controllers.UpdateCategory)
 
-		api.GET("/tags", controllers.GetTagList)
-		api.POST("/tag", controllers.AddTag)
-		api.DELETE("/tag/:tid", controllers.DeleteTag)
-		api.PUT("/tag", controllers.UpdateTag)
+		api.GET("/admin/tags", controllers.GetTagList)
+		api.POST("/admin/tag", controllers.AddTag)
+		api.DELETE("/admin/tag/:tid", controllers.DeleteTag)
+		api.PUT("/admin/tag", controllers.UpdateTag)
 
-		api.GET("/articles", controllers.GetArticleList)
-		api.GET("/article/:aid", controllers.GetArticleInfo)
-		api.POST("/article", controllers.AddArticle)
-		api.DELETE("/article/:aid", controllers.DeleteArticle)
-		api.PUT("/article", controllers.UpdateArticle)
+		api.GET("/admin/articles", controllers.GetArticleList)
+		api.GET("/admin/article/:aid", controllers.GetArticleInfo)
+		api.POST("/admin/article", controllers.AddArticle)
+		api.DELETE("/admin/article/:aid", controllers.DeleteArticle)
+		api.PUT("/admin/article", controllers.UpdateArticle)
 
-		api.POST("/upload", controllers.UploadImg)
+		api.POST("/admin/upload", controllers.UploadImg)
 	}
 
 	return r
