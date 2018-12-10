@@ -10,14 +10,14 @@ import (
 func InitRouter() *gin.Engine {
 	r := gin.Default()
 
-	r.StaticFS("/upload", http.Dir("upload"))
 	r.StaticFS("/static", http.Dir("static"))
+	r.StaticFS("/upload", http.Dir("upload"))
 
 	r.LoadHTMLGlob("views/*/*")
 
 	r.GET("/", controllers.Home)
 
-	api := r.Group("/v1/api")
+	api := r.Group("/api")
 	{
 		api.POST("/admin/user/login", controllers.Login)
 

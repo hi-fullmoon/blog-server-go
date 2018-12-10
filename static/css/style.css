@@ -3,14 +3,16 @@
 .br-6 {
     border-radius: 6px;
 }
-
-
+.bs-2 {
+    box-shadow: 1px 1px 2px #ccc;
+    transition: .3s all;
+}
 
 html, body, .main-container {
     height: 100%;
 }
 body {
-    background: aliceblue;
+    background: #f5f5f5;
 }
 
 .main-container {
@@ -21,8 +23,8 @@ body {
 .main-sidebar {
     position: fixed;
     top: 80px;
-    width: 200px;
-    padding: 10px 0;
+    width: 192px;
+    padding: 20px 0;
     background: #fff;
 }
 .main-sidebar .avatar {
@@ -31,6 +33,12 @@ body {
     margin: 0 auto;
     border-radius: 45px;
     overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 0 4px #000;
+    transition: .3s all;
+}
+.main-sidebar .avatar:hover {
+    box-shadow: 0 0 10px #000;
 }
 .main-sidebar .avatar img {
     width: 100%;
@@ -40,18 +48,100 @@ body {
     width: 100%;
     margin-top: 10px;
     text-align: center;
-    font-size: 16px;
-    font-weight: 600;
+    font-size: 20px;
+    font-weight: 500;
+    color: rgba(0, 0, 0, .9);
 }
 .main-sidebar .in-a-word {
     font-size: 12px;
     padding: 0 10px;
-    margin-top: 10px;
-    text-indent: 2em;
+    margin-top: 12px;
+    text-align: center;
+}
+.main-sidebar .menu {
+    text-align: center;
+}
+.main-sidebar .menu li {
+    display: inline-block;
+    font-size: 13px;
+}
+.main-sidebar .menu em {
+    display: block;
+    font-style: normal;
+}
+.main-sidebar .menu a {
+    color: #888;
+}
+.main-sidebar .menu--horizontal {
+    margin-top: 16px;
+}
+.main-sidebar .menu--horizontal li {
+    border-right: 1px solid #ccc;
+}
+.main-sidebar .menu--horizontal a {
+    display: block;
+    padding: 0 10px;
+}
+.main-sidebar .menu--horizontal li:last-child {
+    border-right: 0;
+}
+.main-sidebar .menu--horizontal a:hover,
+.main-sidebar .menu--horizontal a.active {
+    color: #000;
+    transform: translateY(-1px);
 }
 
-.main-content {
-    padding-left: 210px;
+.main-sidebar .menu--vertical {
+    margin-top: 10px;
+}
+.main-sidebar .menu--vertical li {
     width: 100%;
+    height: 34px;
+    line-height: 34px;
+    font-size: 16px;
+    letter-spacing: 2px;
+}
+.main-sidebar .menu--vertical a {
+    display: inline-block;
+    width: 100%;
+    transition: .4s all ease-in-out;
+}
+.main-sidebar .menu--vertical a:hover,
+.main-sidebar .menu--vertical a.active {
+    background: #91ccff;
+    color: #fff;
+}
+.main-content-container {
+    padding: 80px 0 0 220px;
+    width: 100%;
+}
+.main-content {
+}
+.main-content .article-item {
+    padding: 20px;
+    margin-bottom: 20px;
     background: #fff;
+    overflow: hidden;
+    cursor: pointer;
+}
+.main-content .article-item:hover {
+    box-shadow: 1px 1px 30px #ccc;
+}
+.main-content .article-item h3 {
+    font-weight: 500;
+    color: rgba(0, 0, 0, .9);
+    font-size: 18px;
+}
+.main-content .article-item .data {
+    margin: 4px 0;
+    font-size: 13px;
+    color: #888;
+}
+.main-content .article-item .desc {
+    text-indent: 2em;
+    font-size: 15px;
+    margin: 4px 0;
+}
+.main-content .article-item .button {
+    font-size: 14px;
 }
