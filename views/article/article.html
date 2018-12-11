@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="/static/css/reset.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <title>我的博客 - 文章</title>
+</head>
+<body>
+<section class="main-container">
+    {{ template "sidebar" . }}
+
+    <section class="main-content">
+        <div class="main-content__inner article br-6 bs-2">
+            <div class="article-detail">
+                <h2>我的第一篇文章</h2>
+                <p class="title-bottom">
+                    该文章发表于<em>2017-05-04</em>&nbsp;&nbsp;-&nbsp;
+                    <em>1111</em> 次访问
+                </p>
+                <div class="image br-6">
+                    <img src="/static/images/334256-106.jpg" alt="cover">
+                </div>
+                <div class="content">
+                    要是问你，你知道当下都有哪些图像格式嘛？我猜你肯定说不全，
+                    因为现在图像格式真的太多了，但是应该能说出这几个常用的格
+                    式：jpg、gif、png和svg。然后我再问你，知不知道这几个格式
+                    有什么区别？各自的适用场景又是什么呢？logo应该是选择svg还
+                    是png？而截图是选jpg还是png好？在不生成过大文件的前提下，
+                    文件的最优质量是多少？了解每个图像格式的工作原理以及它们各
+                    自的利弊可以帮助回答这些问题。
+                    在过去几年中，数字化设计和前端开发里大量的研究和测试工具已经
+                    帮助我们搞清楚了这些问题。在本文中，我将展示一下每种格式的工
+                    作原理，它们各自的优点以及在网页使用时的压缩与保存方法。
+                </div>
+                <div class="content-bottom">
+                    Category：<span class="category">分类一</span>&nbsp;&nbsp;·&nbsp;
+                    Tags：<span class="tag">javascript</span> <span class="tag">webpack</span>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>
+
+<script src="/static/js/main.js"></script>
+</body>
+</html>

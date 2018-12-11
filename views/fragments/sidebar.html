@@ -1,34 +1,35 @@
 {{ define "sidebar" }}
 <section class="main-sidebar br-6 bs-2">
     <div class="avatar">
-        <img src="static/images/avatar.jpg" alt="头像">
+        <img src="/static/images/avatar.jpg" alt="头像">
     </div>
-    <div class="username">那是你太美</div>
+    <div class="username">zhengbiwen</div>
     <p class="in-a-word">一直学习下去</p>
     <ul class="menu menu--horizontal">
         <li>
-            <a class="active" href="">
+            <a {{ if eq .page "home" }}class="active"{{ end }} href="/">
                 <em>100</em>
                 <span>文章</span>
             </a>
         </li>
         <li>
-            <a href="">
-                <em>100</em>
+            <a {{ if eq .page "category" }}class="active"{{ end }} href="/categories">
+                <em>2</em>
                 <span>分类</span>
             </a>
         </li>
         <li>
-            <a href="">
-                <em>100</em>
+            <a {{ if eq .page "tag" }}class="active"{{ end }} href="/tags">
+                <em>11</em>
                 <span>标签</span>
             </a>
         </li>
     </ul>
     <ul class="menu menu--vertical">
-        <li><a href="#">归档</a></li>
-        <li><a href="#">留言板</a></li>
-        <li><a href="#">关于我</a></li>
+        <li><a {{ if eq .page "archive" }}class="active"{{ end }} href="/archives">归档</a></li>
+        <li><a {{ if eq .page "message-board" }}class="active"{{ end }} href="/message-board">留言板</a></li>
+        <li><a {{ if eq .page "about" }}class="active"{{ end }} href="/about">关于我</a></li>
+        <li><a href="#">搜索</a></li>
     </ul>
 </section>
 {{ end }}

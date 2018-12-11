@@ -9,49 +9,114 @@
 </head>
 <body>
     <section class="main-container">
-        {{ template "sidebar" }}
+        {{ template "sidebar" . }}
 
-        <section class="main-content-container">
-            <div class="main-content">
+        <section class="main-content">
+            <div class="main-content__inner home">
                 <div class="article-item br-6 bs-2">
                     <h3>第一篇博文</h3>
-                    <p class="data">
-                        <span>2018/12/10</span>
-                        <span>浏览次数：222</span>
-                        <span>tag: javascript、webpack</span>
+                    <p class="title-bottom">
+                        该文章发表于<em>2018/12/10</em>&nbsp;&nbsp;·&nbsp;
+                        访问次数为<em>1111</em> 次
                     </p>
-                    <p class="desc">
-                        这是第一篇博文这是第一篇博文这是第一篇博文这是第一篇博文
-                        这是第一篇博文这是第一篇博文这是第一篇博文这是第一篇博文
-                        这是第一篇博文这是第一篇博文这是第一篇博文这是第一篇博文。。。
-                    </p>
-                    <a class="button" href="">阅读更多</a>
-                </div>
-                <div class="article-item br-6 bs-2">
-                    <h3>第一篇博文</h3>
-                    <p class="data">
-                        <span>2018/12/10</span>
-                        <span>浏览次数：222</span>
-                        <span>tag: javascript、webpack</span>
-                    </p>
-                    <p class="desc">
-                        这是第一篇博文这是第一篇博文这是第一篇博文这是第一篇博文
-                        这是第一篇博文这是第一篇博文这是第一篇博文这是第一篇博文
-                        这是第一篇博文这是第一篇博文这是第一篇博文这是第一篇博文。。。
-                    </p>
-                    <a class="button" href="">阅读更多</a>
-                </div>
-                <div class="article-item br-6 bs-2">
-                    <h3>第一篇博文</h3>
+                    <div class="content">
+                        <p class="desc">
+                            这是第一篇博文这是第一篇博文这是第一篇博文这是第一篇博文
+                            这是第一篇博文这是第一篇博文这是第一篇博文这是第一篇博文
+                            这是第一篇博文这是第一篇博文这是第一篇博文这是第一篇博文。。。
+                        </p>
+                        <div class="image br-6">
+                            <img src="static/images/334256-106.jpg" alt="图片">
+                        </div>
+                    </div>
                     <p>
-                        <span>2018/12/10</span>
-                        <span>浏览次数：222</span>
-                        <span>tag: javascript、webpack</span>
+                        <span class="tag">javascript</span>
+                        <span class="tag">webpack</span>
+                    </p>
+                    <a class="button" href="/articles/1">阅读全文</a>
+                </div>
+                <div class="article-item br-6 bs-2">
+                    <h3>第一篇博文</h3>
+                    <p class="title-bottom">
+                        该文章发表于<em>2018/12/10</em>&nbsp;&nbsp;&nbsp;&nbsp;
+                        访问次数为<em>1111</em> 次
                     </p>
                     <p class="desc">
                         这是第一篇博文这是第一篇博文这是第一篇博文这是第一篇博文
                         这是第一篇博文这是第一篇博文这是第一篇博文这是第一篇博文
                         这是第一篇博文这是第一篇博文这是第一篇博文这是第一篇博文。。。
+                    </p>
+                    <p>
+                        <span class="tag">javascript</span>
+                        <span class="tag">webpack</span>
+                    </p>
+                    <a class="button" href="">阅读更多</a>
+                </div>
+                <div class="article-item br-6 bs-2">
+                    <h3>第一篇博文</h3>
+                    <p class="title-bottom">
+                        该文章发表于<em>2018/12/10</em>&nbsp;&nbsp;&nbsp;&nbsp;
+                        访问次数为<em>1111</em> 次
+                    </p>
+                    <p class="desc">
+                        这是第一篇博文这是第一篇博文这是第一篇博文这是第一篇博文
+                        这是第一篇博文这是第一篇博文这是第一篇博文这是第一篇博文
+                        这是第一篇博文这是第一篇博文这是第一篇博文这是第一篇博文。。。
+                    </p>
+                    <p>
+                        <span class="tag">javascript</span>
+                        <span class="tag">webpack</span>
+                    </p>
+                    <a class="button" href="">阅读更多</a>
+                </div>
+                <div class="article-item br-6 bs-2">
+                    <h3>第一篇博文</h3>
+                    <p class="title-bottom">
+                        该文章发表于<em>2018/12/10</em>&nbsp;&nbsp;&nbsp;&nbsp;
+                        访问次数为<em>1111</em> 次
+                    </p>
+                    <p class="desc">
+                        这是第一篇博文这是第一篇博文这是第一篇博文这是第一篇博文
+                        这是第一篇博文这是第一篇博文这是第一篇博文这是第一篇博文
+                        这是第一篇博文这是第一篇博文这是第一篇博文这是第一篇博文。。。
+                    </p>
+                    <p>
+                        <span class="tag">javascript</span>
+                        <span class="tag">webpack</span>
+                    </p>
+                    <a class="button" href="">阅读更多</a>
+                </div>
+                <div class="article-item br-6 bs-2">
+                    <h3>第一篇博文</h3>
+                    <p class="title-bottom">
+                        该文章发表于<em>2018/12/10</em>&nbsp;&nbsp;&nbsp;&nbsp;
+                        访问次数为<em>1111</em> 次
+                    </p>
+                    <p class="desc">
+                        这是第一篇博文这是第一篇博文这是第一篇博文这是第一篇博文
+                        这是第一篇博文这是第一篇博文这是第一篇博文这是第一篇博文
+                        这是第一篇博文这是第一篇博文这是第一篇博文这是第一篇博文。。。
+                    </p>
+                    <p>
+                        <span class="tag">javascript</span>
+                        <span class="tag">webpack</span>
+                    </p>
+                    <a class="button" href="">阅读更多</a>
+                </div>
+                <div class="article-item br-6 bs-2">
+                    <h3>第一篇博文</h3>
+                    <p class="title-bottom">
+                        该文章发表于<em>2018/12/10</em>&nbsp;&nbsp;&nbsp;&nbsp;
+                        访问次数为<em>1111</em> 次
+                    </p>
+                    <p class="desc">
+                        这是第一篇博文这是第一篇博文这是第一篇博文这是第一篇博文
+                        这是第一篇博文这是第一篇博文这是第一篇博文这是第一篇博文
+                        这是第一篇博文这是第一篇博文这是第一篇博文这是第一篇博文。。。
+                    </p>
+                    <p>
+                        <span class="tag">javascript</span>
+                        <span class="tag">webpack</span>
                     </p>
                     <a class="button" href="">阅读更多</a>
                 </div>

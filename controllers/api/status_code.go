@@ -1,4 +1,4 @@
-package controllers
+package api
 
 const (
 	StatusSuccess  int = 0

@@ -3,6 +3,7 @@ package routers
 import (
 	"net/http"
 	"zhengbiwen/blog_management_system/controllers"
+	"zhengbiwen/blog_management_system/controllers/api"
 
 	"github.com/gin-gonic/gin"
 )
@@ -16,34 +17,40 @@ func InitRouter() *gin.Engine {
 	r.LoadHTMLGlob("views/*/*")
 
 	r.GET("/", controllers.Home)
+	r.GET("/categories", controllers.CategoryList)
+	r.GET("/tags", controllers.TagList)
+	r.GET("/articles/:aid", controllers.Article)
+	r.GET("/archives", controllers.Archive)
+	r.GET("/about", controllers.About)
+	r.GET("/message-board", controllers.MessageBoard)
 
-	api := r.Group("/api")
+	admin := r.Group("/api/admin")
 	{
-		api.POST("/admin/user/login", controllers.Login)
+		admin.POST("/user/login", api.Login)
 
-		api.Use(controllers.ValidateUserSession())
+		admin.Use(api.ValidateUserSession())
 
-		api.GET("/admin/user/:uid", controllers.GetUser)
-		api.PUT("/admin/user", controllers.UpdateUser)
-		api.POST("/admin/user/password", controllers.UpdateUserPwd)
+		admin.GET("/user/:uid", api.GetUser)
+		admin.PUT("/user", api.UpdateUser)
+		admin.POST("/user/password", api.UpdateUserPwd)
 
-		api.GET("/admin/categories", controllers.GetCategoryList)
-		api.POST("/admin/category", controllers.AddCategory)
-		api.DELETE("/admin/category/:cid", controllers.DeleteCategory)
-		api.PUT("/admin/category", controllers.UpdateCategory)
+		admin.GET("/categories", api.GetCategoryList)
+		admin.POST("/category", api.AddCategory)
+		admin.DELETE("/category/:cid", api.DeleteCategory)
+		admin.PUT("/category", api.UpdateCategory)
 
-		api.GET("/admin/tags", controllers.GetTagList)
-		api.POST("/admin/tag", controllers.AddTag)
-		api.DELETE("/admin/tag/:tid", controllers.DeleteTag)
-		api.PUT("/admin/tag", controllers.UpdateTag)
+		admin.GET("/tags", api.GetTagList)
+		admin.POST("/tag", api.AddTag)
+		admin.DELETE("/tag/:tid", api.DeleteTag)
+		admin.PUT("/tag", api.UpdateTag)
 
-		api.GET("/admin/articles", controllers.GetArticleList)
-		api.GET("/admin/article/:aid", controllers.GetArticleInfo)
-		api.POST("/admin/article", controllers.AddArticle)
-		api.DELETE("/admin/article/:aid", controllers.DeleteArticle)
-		api.PUT("/admin/article", controllers.UpdateArticle)
+		admin.GET("/articles", api.GetArticleList)
+		admin.GET("/article/:aid", api.GetArticleInfo)
+		admin.POST("/article", api.AddArticle)
+		admin.DELETE("/article/:aid", api.DeleteArticle)
+		admin.PUT("/article", api.UpdateArticle)
 
-		api.POST("/admin/upload", controllers.UploadImg)
+		admin.POST("/upload", api.UploadImg)
 	}
 
 	return r
