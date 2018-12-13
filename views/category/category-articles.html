@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    {{ template "styles" }}
+    <title>我的博客 - 分类</title>
+</head>
+<body>
+<section class="main-container">
+    {{ template "sidebar" . }}
+
+    <section class="main-content">
+        <div class="main-content__inner categories br-6 bs-2">
+            <p>分类一</p>
+            <ul class="article-list">
+                <li><em class="date">2018-12-13</em><a class="title" href="/articles/1">我劝你早点归去</a></li>
+                <li><em class="date">2018-12-13</em><a class="title" href="">你说你不想归去</a></li>
+                <li><em class="date">2018-12-13</em><a class="title" href="">只叫我抱着你</a></li>
+                <li><em class="date">2018-12-13</em><a class="title" href="">你已令我快乐，我也令你痴痴醉</a></li>
+                <li><em class="date">2018-12-13</em><a class="title" href="">眼泪默默垂</a></li>
+            </ul>
+        </div>
+    </section>
+</section>
+
+{{ template "scripts" }}
+</body>
+</html>

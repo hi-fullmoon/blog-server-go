@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="/static/css/reset.css">
-    <link rel="stylesheet" href="/static/css/style.css">
+    {{ template "styles" }}
+    <link rel="stylesheet" href="/static/css/editormd.preview.min.css">
     <title>我的博客 - 文章</title>
 </head>
 <body>
@@ -23,16 +23,49 @@
                     <img src="/static/images/334256-106.jpg" alt="cover">
                 </div>
                 <div class="content">
-                    要是问你，你知道当下都有哪些图像格式嘛？我猜你肯定说不全，
-                    因为现在图像格式真的太多了，但是应该能说出这几个常用的格
-                    式：jpg、gif、png和svg。然后我再问你，知不知道这几个格式
-                    有什么区别？各自的适用场景又是什么呢？logo应该是选择svg还
-                    是png？而截图是选jpg还是png好？在不生成过大文件的前提下，
-                    文件的最优质量是多少？了解每个图像格式的工作原理以及它们各
-                    自的利弊可以帮助回答这些问题。
-                    在过去几年中，数字化设计和前端开发里大量的研究和测试工具已经
-                    帮助我们搞清楚了这些问题。在本文中，我将展示一下每种格式的工
-                    作原理，它们各自的优点以及在网页使用时的压缩与保存方法。
+                    <div id="editormd-view">
+                    <textarea style="display:none;">lalalalal
+```golang
+type Person struct {
+  Age int
+  Name string
+}
+func GetAll() {}
+
+```
+```html
+<!DOCTYPE html>
+<html>
+    <head>
+        <mate charest="utf-8"/>
+        <meta name="keywords" content="Editor.md, Markdown, Editor"/>
+        <title>Hello world!</title>
+        <style type="text/css">
+            body {
+                font-size: 14px;
+                color: #444;
+                font-family: "Microsoft Yahei", Tahoma, "Hiragino Sans GB", Arial;
+                background: #fff;
+            }
+
+            ul {
+                list-style: none;
+            }
+
+            img {
+                border: none;
+                vertical-align: middle;
+            }
+        </style>
+    </head>
+    <body>
+        <h1 class="text-xxl">Hello world!</h1>
+        <p class="text-green">Plain text</p>
+    </body>
+</html>
+```
+                    </textarea>
+                    </div>
                 </div>
                 <div class="content-bottom">
                     Category：<span class="category">分类一</span>&nbsp;&nbsp;·&nbsp;
@@ -43,6 +76,15 @@
     </section>
 </section>
 
-<script src="/static/js/main.js"></script>
+{{ template "scripts"}}
+
+<script src="/static/js/marked.min.js"></script>
+<script src="/static/js/prettify.min.js"></script>
+<script src="/static/js/editormd.js"></script>
+<script>
+    $(function () {
+        editormd.markdownToHTML("editormd-view", {});
+    });
+</script>
 </body>
 </html>

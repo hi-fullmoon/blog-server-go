@@ -2,8 +2,8 @@ package routers
 
 import (
 	"net/http"
+	"zhengbiwen/blog_management_system/api"
 	"zhengbiwen/blog_management_system/controllers"
-	"zhengbiwen/blog_management_system/controllers/api"
 
 	"github.com/gin-gonic/gin"
 )
@@ -18,7 +18,9 @@ func InitRouter() *gin.Engine {
 
 	r.GET("/", controllers.Home)
 	r.GET("/categories", controllers.CategoryList)
+	r.GET("/categories/:cid", controllers.CategoryArticles)
 	r.GET("/tags", controllers.TagList)
+	r.GET("/tags/:tid", controllers.TagArticles)
 	r.GET("/articles/:aid", controllers.Article)
 	r.GET("/archives", controllers.Archive)
 	r.GET("/about", controllers.About)

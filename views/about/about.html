@@ -3,8 +3,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="static/css/reset.css">
-    <link rel="stylesheet" href="static/css/style.css">
+
+    {{ template "styles" }}
+
     <title>我的博客 - 关于我</title>
 </head>
 <body>
@@ -14,10 +15,18 @@
     <section class="main-content">
         <div class="main-content__inner about bs-2 br-6">
             <p>关于我</p>
+            <div class="introduce">
+                <p>本人名叫郑必文，坐标杭州。</p>
+                <p>希望自己越来越好。哈哈。。。</p>
+                <br>
+                <p>有什么需要指正的要联系我，共勉。。。</p>
+                <p>qq：1317812522</p>
+                <p>github: <a target="_blank" href="https://github.com/web-zbw">https://github.com/web-zbw</a></p>
+            </div>
         </div>
     </section>
 </section>
 
-<script src="static/js/main.js"></script>
+{{ template "scripts" }}
 </body>
 </html>

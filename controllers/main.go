@@ -18,8 +18,20 @@ func CategoryList(c *gin.Context) {
 	})
 }
 
+func CategoryArticles(c *gin.Context) {
+	c.HTML(http.StatusOK, "category-articles.html", gin.H{
+		"page": "category",
+	})
+}
+
 func TagList(c *gin.Context) {
 	c.HTML(http.StatusOK, "tag.html", gin.H{
+		"page": "tag",
+	})
+}
+
+func TagArticles(c *gin.Context) {
+	c.HTML(http.StatusOK, "tag-articles.html", gin.H{
 		"page": "tag",
 	})
 }

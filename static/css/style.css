@@ -31,6 +31,7 @@ body {
     font-family: sourcesanspro, "Helvetica Neue", Arial, sans-serif;
     background: #f5f5f5;
     color: #333;
+    overflow: hidden;
 }
 .main-container {
     max-width: 1120px;
@@ -43,7 +44,7 @@ body {
 }
 .main-content__inner {
     width: 100%;
-    min-height: 394px;
+    min-height: 409px;
     padding: 24px;
     margin-bottom: 24px;
     background: #fff;
@@ -92,6 +93,21 @@ body {
     padding: 0 10px;
     margin-top: 12px;
     text-align: center;
+}
+.main-sidebar .search {
+    margin: 20px 0;
+    padding: 0 20px;
+    text-align: center;
+}
+.main-sidebar .search input {
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    font-size: 15px;
+    text-align: center;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid #ccc;
 }
 .main-sidebar .menu {
     text-align: center;
@@ -200,7 +216,7 @@ body {
     float: right;
 }
 
-/* articles categories tags
+/* categories
 ---------------------------------------------- */
 .main-content__inner .category-list {
     margin-top: 30px;
@@ -219,6 +235,8 @@ body {
     text-decoration: underline;
 }
 
+/* tags
+---------------------------------------------- */
 .main-content__inner .tag-list {
     margin-top: 30px;
     padding-left: 10px;
@@ -236,6 +254,31 @@ body {
     color: aquamarine;
 }
 
+/* category -> article-list
+   tag --> article-list
+---------------------------------------------- */
+.main-content__inner .article-list {
+    margin-top: 24px;
+    line-height: 1.6;
+    color: #888888;
+}
+.main-content__inner .article-list .date {
+    display: inline-block;
+    font-style: normal;
+    margin-right: 20px;
+    font-size: 16px;
+    font-family: Georgia, serif;
+}
+
+.main-content__inner .article-list .title {
+    color: #888888;
+}
+.main-content__inner .article-list .title:hover {
+    color: #2196F3;
+}
+
+/* archive
+---------------------------------------------- */
 .main-content__inner .archive-list {
     margin-top: 20px;
     padding-left: 10px;
@@ -258,7 +301,7 @@ body {
     color: #333;
 }
 .main-content__inner .archive-list a:hover {
-    color: #538488;
+    color: #2196F3;
 }
 .main-content__inner .archive-list em {
     font-style: normal;
@@ -266,6 +309,8 @@ body {
     width: 80px;
 }
 
+/* articles
+---------------------------------------------- */
 .main-content__inner.article {
     font-size: 15px;
     line-height: 1.6;
@@ -291,4 +336,28 @@ body {
     padding-bottom: 20px;
     margin-bottom: 20px;
     border-bottom: 1px solid #cccccc;
+}
+.main-content__inner .markdown-body .tag {
+    color: #008;
+    font-family: inherit;
+    font-size: inherit;
+    display: inherit;
+    background-color: transparent;
+    padding: inherit;
+    margin: inherit;
+    border-radius: 0;
+}
+.main-content__inner .markdown-body {
+    padding: 0;
+}
+
+/* about
+---------------------------------------------- */
+.main-content__inner.about .introduce {
+    margin-top: 24px;
+}
+
+.main-content__inner.about .introduce p {
+    line-height: 1.5;
+    font-size: 15px;
 }

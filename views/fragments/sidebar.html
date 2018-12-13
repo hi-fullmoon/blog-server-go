@@ -5,6 +5,7 @@
     </div>
     <div class="username">zhengbiwen</div>
     <p class="in-a-word">一直学习下去</p>
+    <p class="search"><input type="text" placeholder="你想要看什么？"></p>
     <ul class="menu menu--horizontal">
         <li>
             <a {{ if eq .page "home" }}class="active"{{ end }} href="/">
@@ -27,9 +28,8 @@
     </ul>
     <ul class="menu menu--vertical">
         <li><a {{ if eq .page "archive" }}class="active"{{ end }} href="/archives">归档</a></li>
-        <li><a {{ if eq .page "message-board" }}class="active"{{ end }} href="/message-board">留言板</a></li>
+        <li><a {{ if eq .page "message-board" }}class="active"{{ end }} href="/message-board" style="cursor: not-allowed;" onclick="return false">留言板</a></li>
         <li><a {{ if eq .page "about" }}class="active"{{ end }} href="/about">关于我</a></li>
-        <li><a href="#">搜索</a></li>
     </ul>
 </section>
 {{ end }}
