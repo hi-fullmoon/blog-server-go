@@ -10,28 +10,28 @@
     </p>
     <ul class="menu menu--horizontal">
         <li>
-            <a {{ if eq .page "home" }}class="active"{{ end }} href="/">
-                <em>100</em>
+            <a {{ if eq .Page "home" }}class="active"{{ end }} href="/">
+                <em>{{ .ArticleCount }}</em>
                 <span>文章</span>
             </a>
         </li>
         <li>
-            <a {{ if eq .page "category" }}class="active"{{ end }} href="/categories">
-                <em>2</em>
+            <a {{ if eq .Page "category" }}class="active"{{ end }} href="/categories">
+                <em>{{ .CategoryCount }}</em>
                 <span>分类</span>
             </a>
         </li>
         <li>
-            <a {{ if eq .page "tag" }}class="active"{{ end }} href="/tags">
-                <em>11</em>
+            <a {{ if eq .Page "tag" }}class="active"{{ end }} href="/tags">
+                <em>{{ .TagCount }}</em>
                 <span>标签</span>
             </a>
         </li>
     </ul>
     <ul class="menu menu--vertical">
-        <li><a {{ if eq .page "archive" }}class="active"{{ end }} href="/archives">归档</a></li>
-        <li><a {{ if eq .page "message-board" }}class="active"{{ end }} href="/message-board" style="cursor: not-allowed;" onclick="return false">留言板</a></li>
-        <li><a {{ if eq .page "about" }}class="active"{{ end }} href="/about">关于我</a></li>
+        <li><a {{ if eq .Page "archive" }}class="active"{{ end }} href="/archives">归档</a></li>
+        <li><a {{ if eq .Page "message-board" }}class="active"{{ end }} href="/message-board" style="cursor: not-allowed;" onclick="return false">留言板</a></li>
+        <li><a {{ if eq .Page "about" }}class="active"{{ end }} href="/about">关于我</a></li>
     </ul>
 </section>
 {{ end }}

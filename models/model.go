@@ -41,6 +41,8 @@ type Article struct {
 	Desc       string `gorm:"size:200"`
 	Content    string `gorm:"size:5000"`
 	LikeCount  int
+	ViewCount  int `gorm:"default:0"`
+	CoverImage string
 	CategoryID uint
 	Category   Category
 	Tags       []Tag `gorm:"many2many:article_tags;"`
@@ -166,6 +168,15 @@ func UpdateCategory(id uint, name, desc string) error {
 	return nil
 }
 
+// get category count
+func GetCategoryCount() (int, error) {
+	var count int
+	if err = db.Model(&Category{}).Count(&count).Error; err != nil {
+		return 0, err
+	}
+	return count, nil
+}
+
 // create tag
 func CreateTag(name string) error {
 	tag := Tag{Name: name}
@@ -224,6 +235,15 @@ func DeleteTag(id uint) error {
 		return err
 	}
 	return nil
+}
+
+// get tag count
+func GetTagCount() (int, error) {
+	var count int
+	if err = db.Model(&Tag{}).Count(&count).Error; err != nil {
+		return 0, err
+	}
+	return count, nil
 }
 
 // create article
@@ -341,4 +361,22 @@ func DeleteArticle(aid uint) error {
 		return err
 	}
 	return nil
+}
+
+// get article count
+func GetArticleCount() (int, error) {
+	var count int
+	if err = db.Model(&Article{}).Count(&count).Error; err != nil {
+		return 0, err
+	}
+	return count, nil
+}
+
+// update article view count
+func UpdateArticleViewCount(aid uint) (int, error) {
+	var article Article
+	if err = db.Model(&article).Where("id = ?", aid).Update("view_count", gorm.Expr("view_count + ?", 1)).Error; err != nil {
+		return 0, err
+	}
+	return article.ViewCount, err
 }

@@ -4,125 +4,39 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     {{ template "styles" }}
-    <title>我的博客</title>
+    <title>我的博客 - 首页</title>
 </head>
 <body>
-    <section class="main-container">
-        {{ template "sidebar" . }}
-        {{ template "searchPanel" }}
+<section class="main-container">
+    {{ template "sidebar" . }}
+    {{ template "searchPanel" }}
 
-        <section class="main-content">
-            <div class="main-content__inner home">
+    <section class="main-content">
+        <div class="main-content__inner home">
+            {{ range .Articles }}
                 <div class="article-item br-6 bs-2">
-                    <h3>第一篇博文</h3>
+                    <h3><a href="/articles/{{ .ID }}">{{ .Title }}</a></h3>
                     <p class="title-bottom">
-                        该文章发表于<em>2018/12/10</em>&nbsp;&nbsp;·&nbsp;
-                        访问次数为<em>1111</em> 次
+                        该文章发表于<em>{{ .CreatedAt }}</em>&nbsp;&nbsp;·&nbsp;
+                        访问次数为<em>{{ .ViewCount }}</em> 次
                     </p>
                     <div class="content">
-                        <p class="desc">
-                            这是第一篇博文这是第一篇博文这是第一篇博文这是第一篇博文
-                            这是第一篇博文这是第一篇博文这是第一篇博文这是第一篇博文
-                            这是第一篇博文这是第一篇博文这是第一篇博文这是第一篇博文。。。
-                        </p>
+                        <p class="desc">{{ .Desc }}</p>
                         <div class="image br-6">
                             <img src="static/images/334256-106.jpg" alt="图片">
                         </div>
                     </div>
-                    <p>
-                        <span class="tag">javascript</span>
-                        <span class="tag">webpack</span>
+                    <p style="height: 21px;">
+                        {{ range .Tags }}
+                            <span class="tag"><a href="/tags/{{ .ID }}">{{ .Name }}</a></span>
+                        {{ end }}
                     </p>
-                    <a class="button" href="/articles/1">阅读全文</a>
+                    <a class="button" href="/articles/{{ .ID }}">阅读全文</a>
                 </div>
-                <div class="article-item br-6 bs-2">
-                    <h3>第一篇博文</h3>
-                    <p class="title-bottom">
-                        该文章发表于<em>2018/12/10</em>&nbsp;&nbsp;&nbsp;&nbsp;
-                        访问次数为<em>1111</em> 次
-                    </p>
-                    <p class="desc">
-                        这是第一篇博文这是第一篇博文这是第一篇博文这是第一篇博文
-                        这是第一篇博文这是第一篇博文这是第一篇博文这是第一篇博文
-                        这是第一篇博文这是第一篇博文这是第一篇博文这是第一篇博文。。。
-                    </p>
-                    <p>
-                        <span class="tag">javascript</span>
-                        <span class="tag">webpack</span>
-                    </p>
-                    <a class="button" href="">阅读更多</a>
-                </div>
-                <div class="article-item br-6 bs-2">
-                    <h3>第一篇博文</h3>
-                    <p class="title-bottom">
-                        该文章发表于<em>2018/12/10</em>&nbsp;&nbsp;&nbsp;&nbsp;
-                        访问次数为<em>1111</em> 次
-                    </p>
-                    <p class="desc">
-                        这是第一篇博文这是第一篇博文这是第一篇博文这是第一篇博文
-                        这是第一篇博文这是第一篇博文这是第一篇博文这是第一篇博文
-                        这是第一篇博文这是第一篇博文这是第一篇博文这是第一篇博文。。。
-                    </p>
-                    <p>
-                        <span class="tag">javascript</span>
-                        <span class="tag">webpack</span>
-                    </p>
-                    <a class="button" href="">阅读更多</a>
-                </div>
-                <div class="article-item br-6 bs-2">
-                    <h3>第一篇博文</h3>
-                    <p class="title-bottom">
-                        该文章发表于<em>2018/12/10</em>&nbsp;&nbsp;&nbsp;&nbsp;
-                        访问次数为<em>1111</em> 次
-                    </p>
-                    <p class="desc">
-                        这是第一篇博文这是第一篇博文这是第一篇博文这是第一篇博文
-                        这是第一篇博文这是第一篇博文这是第一篇博文这是第一篇博文
-                        这是第一篇博文这是第一篇博文这是第一篇博文这是第一篇博文。。。
-                    </p>
-                    <p>
-                        <span class="tag">javascript</span>
-                        <span class="tag">webpack</span>
-                    </p>
-                    <a class="button" href="">阅读更多</a>
-                </div>
-                <div class="article-item br-6 bs-2">
-                    <h3>第一篇博文</h3>
-                    <p class="title-bottom">
-                        该文章发表于<em>2018/12/10</em>&nbsp;&nbsp;&nbsp;&nbsp;
-                        访问次数为<em>1111</em> 次
-                    </p>
-                    <p class="desc">
-                        这是第一篇博文这是第一篇博文这是第一篇博文这是第一篇博文
-                        这是第一篇博文这是第一篇博文这是第一篇博文这是第一篇博文
-                        这是第一篇博文这是第一篇博文这是第一篇博文这是第一篇博文。。。
-                    </p>
-                    <p>
-                        <span class="tag">javascript</span>
-                        <span class="tag">webpack</span>
-                    </p>
-                    <a class="button" href="">阅读更多</a>
-                </div>
-                <div class="article-item br-6 bs-2">
-                    <h3>第一篇博文</h3>
-                    <p class="title-bottom">
-                        该文章发表于<em>2018/12/10</em>&nbsp;&nbsp;&nbsp;&nbsp;
-                        访问次数为<em>1111</em> 次
-                    </p>
-                    <p class="desc">
-                        这是第一篇博文这是第一篇博文这是第一篇博文这是第一篇博文
-                        这是第一篇博文这是第一篇博文这是第一篇博文这是第一篇博文
-                        这是第一篇博文这是第一篇博文这是第一篇博文这是第一篇博文。。。
-                    </p>
-                    <p>
-                        <span class="tag">javascript</span>
-                        <span class="tag">webpack</span>
-                    </p>
-                    <a class="button" href="">阅读更多</a>
-                </div>
-            </div>
-        </section>
+            {{ end }}
+        </div>
     </section>
+</section>
 
 {{ template "scripts" }}
 </body>
