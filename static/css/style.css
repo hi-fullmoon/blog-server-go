@@ -1,3 +1,18 @@
+/* reset
+---------------------------------------------- */
+body, h1, h2, h3, h4, p, ul, li {
+    margin: 0; padding: 0;
+}
+ul {
+    list-style: none;
+}
+a {
+    text-decoration: none;
+}
+html * {
+    box-sizing: border-box;
+}
+
 /* common
 ---------------------------------------------- */
 .br-6 {
@@ -132,6 +147,8 @@ body {
 .main-sidebar .menu--horizontal a {
     display: block;
     padding: 0 10px;
+    font-weight: 500;
+    transition: .3s all;
 }
 .main-sidebar .menu--horizontal li:last-child {
     border-right: 0;
@@ -139,7 +156,7 @@ body {
 .main-sidebar .menu--horizontal a:hover,
 .main-sidebar .menu--horizontal a.active {
     color: #000;
-    transform: translateY(-1px);
+    font-weight: 600;
 }
 .main-sidebar .menu--vertical {
     margin-top: 10px;
@@ -360,4 +377,74 @@ body {
 .main-content__inner.about .introduce p {
     line-height: 1.5;
     font-size: 15px;
+}
+
+/* search-panel
+---------------------------------------------- */
+.search-panel {
+    display: none;
+    z-index: 10;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, .6);
+}
+.search-panel__inner {
+    margin: 100px auto 0;
+    width: 40%;
+    min-height: 40px;
+    max-height: 400px;
+    min-width: 300px;
+    background: #fff;
+    border-left: 5px solid #78887d;
+}
+.search-input {
+    width: 100%;
+    position: relative;
+}
+.search-input .close {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    background: url(/static/images/icon_close.png) no-repeat center / 60%;
+}
+.search-input__inner {
+    width: 100%;
+    height: 40px;
+    padding: 0 20px;
+    line-height: 40px;
+    outline: none;
+    border: none;
+    text-align: left;
+    font-size: 18px;
+}
+.search-result {
+    background: #e2e2e2;
+    max-height: 360px;
+    overflow: hidden;
+}
+.search-result__item {
+    height: 40px;
+    line-height: 40px;
+}
+.search-result__item a {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 0 20px;
+    color: #9a9a9a;
+    font-family: sans-serif;
+    font-size: 15px;
+    transition: .3s all;
+}
+.search-result__item a:hover {
+    background-color: #91ccff;
+    color: #fff;
 }

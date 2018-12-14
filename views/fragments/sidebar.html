@@ -4,8 +4,10 @@
         <img src="/static/images/avatar.jpg" alt="头像">
     </div>
     <div class="username">zhengbiwen</div>
-    <p class="in-a-word">一直学习下去</p>
-    <p class="search"><input type="text" placeholder="你想要看什么？"></p>
+    <p class="in-a-word">就这样，抬头看天空。</p>
+    <p class="search">
+        <input id="search-input" type="text" placeholder="你想要看什么？" readonly>
+    </p>
     <ul class="menu menu--horizontal">
         <li>
             <a {{ if eq .page "home" }}class="active"{{ end }} href="/">
