@@ -17,11 +17,13 @@
         <div class="main-content__inner categories br-6 bs-2">
             <p>文章分类</p>
             <ul class="category-list">
-                <li><a href="/categories/1">分类一（11）</a></li>
-                <li><a href="">分类二（1）</a></li>
-                <li><a href="">分类三（0）</a></li>
-                <li><a href="">分类四（8）</a></li>
-                <li><a href="">分类五（5）</a></li>
+                {{ if .CategoryList }}
+                    {{ range .CategoryList }}
+                        <li><a href="/categories/{{ .Name }}">{{ .Name }}（ {{ len .Articles }} ）</a></li>
+                    {{ end }}
+                {{ else }}
+                    <li>暂无分类</li>
+                {{ end }}
             </ul>
         </div>
     </section>

@@ -14,38 +14,22 @@
     <section class="main-content">
         <div class="main-content__inner archives bs-2 br-6">
             <p>归档</p>
-            
+
             <ul class="archive-list">
-                <li>
-                    <h4>2018年</h4>
-                    <ul>
-                        <li class="item"><a href=""><em>7月5号</em> 第一博文</a></li>
-                        <li class="item"><a href=""><em>7月5号</em> 第一博文</a></li>
-                        <li class="item"><a href=""><em>7月5号</em> 第一博文</a></li>
-                        <li class="item"><a href=""><em>7月5号</em> 第一博文</a></li>
-                        <li class="item"><a href=""><em>7月5号</em> 第一博文</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <h4>2017年</h4>
-                    <ul>
-                        <li class="item"><a href=""><em>7月5号</em> 第一博文</a></li>
-                        <li class="item"><a href=""><em>7月5号</em> 第一博文</a></li>
-                        <li class="item"><a href=""><em>7月5号</em> 第一博文</a></li>
-                        <li class="item"><a href=""><em>7月5号</em> 第一博文</a></li>
-                        <li class="item"><a href=""><em>7月5号</em> 第一博文</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <h4>2016年</h4>
-                    <ul>
-                        <li class="item"><a href=""><em>7月5号</em> 第一博文</a></li>
-                        <li class="item"><a href=""><em>7月5号</em> 第一博文</a></li>
-                        <li class="item"><a href=""><em>7月5号</em> 第一博文</a></li>
-                        <li class="item"><a href=""><em>7月5号</em> 第一博文</a></li>
-                        <li class="item"><a href=""><em>7月5号</em> 第一博文</a></li>
-                    </ul>
-                </li>
+                {{ range .DateLine }}
+                    <li>
+                        <h4>{{ .YearAt }}年{{ .MonthAt }}月</h4>
+                        <ul>
+                            {{ range .Articles }}
+                                <li class="item">
+                                    <a href="/articles/{{ .ID }}">
+                                        <em>{{ .MonthAt }}月{{ .DayAt }}日</em> {{ .Title }}
+                                    </a>
+                                </li>
+                            {{ end }}
+                        </ul>
+                    </li>
+                {{ end }}
             </ul>
         </div>
     </section>

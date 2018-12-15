@@ -14,65 +14,30 @@
 
     <section class="main-content">
         <div class="main-content__inner article br-6 bs-2">
-            <div class="article-detail">
-                <h2>我的第一篇文章</h2>
-                <p class="title-bottom">
-                    该文章发表于<em>2017-05-04</em>&nbsp;&nbsp;-&nbsp;
-                    <em>1111</em> 次访问
-                </p>
-                <div class="image br-6">
-                    <img src="/static/images/334256-106.jpg" alt="cover">
-                </div>
-                <div class="content">
-                    <div id="editormd-view">
-                    <textarea style="display:none;">lalalalal
-```golang
-type Person struct {
-  Age int
-  Name string
-}
-func GetAll() {}
-
-```
-```html
-<!DOCTYPE html>
-<html>
-    <head>
-        <mate charest="utf-8"/>
-        <meta name="keywords" content="Editor.md, Markdown, Editor"/>
-        <title>Hello world!</title>
-        <style type="text/css">
-            body {
-                font-size: 14px;
-                color: #444;
-                font-family: "Microsoft Yahei", Tahoma, "Hiragino Sans GB", Arial;
-                background: #fff;
-            }
-
-            ul {
-                list-style: none;
-            }
-
-            img {
-                border: none;
-                vertical-align: middle;
-            }
-        </style>
-    </head>
-    <body>
-        <h1 class="text-xxl">Hello world!</h1>
-        <p class="text-green">Plain text</p>
-    </body>
-</html>
-```
-                    </textarea>
+            {{ with .Article }}
+                <div class="article-detail">
+                    <h2>{{ .Title }}</h2>
+                    <p class="title-bottom">
+                        该文章发表于 <em>{{ .YearAt }}/{{ .MonthAt }}/{{ .DayAt }}</em>&nbsp;&nbsp;·&nbsp;
+                        访问次数为 <em>{{ .ViewCount }}</em> 次
+                    </p>
+                    <div class="image br-6">
+                        <img src="/static/images/334256-106.jpg" alt="cover">
+                    </div>
+                    <div class="content">
+                        <div id="editormd-view">
+                            <textarea style="display:none;">{{ .Content }}</textarea>
+                        </div>
+                    </div>
+                    <div class="content-bottom">
+                        Category：<span class="category"><a href="/categories/{{ .Category.Name }}">{{ .Category.Name }}</a></span>&nbsp;&nbsp;·&nbsp;
+                        Tags：
+                        {{ range .Tags }}
+                            <span class="tag"><a href="/tags/{{ .Name }}">{{ .Name }}</a></span>
+                        {{ end }}
                     </div>
                 </div>
-                <div class="content-bottom">
-                    Category：<span class="category">分类一</span>&nbsp;&nbsp;·&nbsp;
-                    Tags：<span class="tag">javascript</span> <span class="tag">webpack</span>
-                </div>
-            </div>
+            {{ end }}
         </div>
     </section>
 </section>

@@ -15,16 +15,13 @@
         <div class="main-content__inner tags br-6 bs-2">
             <p>标签云</p>
             <ul class="tag-list">
-                <li><a href="tags/1">标签一</a></li>
-                <li><a href="">标签二</a></li>
-                <li><a href="">标签三</a></li>
-                <li><a href="">标签四</a></li>
-                <li><a href="">标签五</a></li>
-                <li><a href="">标签六</a></li>
-                <li><a href="">标签七</a></li>
-                <li><a href="">标签八</a></li>
-                <li><a href="">标签九</a></li>
-                <li><a href="">标签十</a></li>
+                {{ if .Tags }}
+                    {{ range .Tags }}
+                        <li><a class="tag" style="margin-bottom: 6px;" href="tags/{{ .Name }}">{{ .Name }}（ {{ len .Articles }} ）</a></li>
+                    {{ end }}
+                {{ else }}
+                    <li>作者还没有创建标签哦···</li>
+                {{ end }}
             </ul>
         </div>
     </section>

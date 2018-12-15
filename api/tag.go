@@ -47,7 +47,7 @@ func GetTagList(c *gin.Context) {
 		pageNumInt = 1
 	}
 
-	tags, total, err := models.ReadTagList(name, pageSizeInt, pageNumInt)
+	tags, total, err := models.GetTagList(name, pageSizeInt, pageNumInt)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"code":    StatusFail,

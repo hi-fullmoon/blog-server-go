@@ -233,6 +233,37 @@ body {
     font-size: 14px;
     float: right;
 }
+.main-content .pagination {
+    position: relative;
+}
+.main-content .article-prev,
+.main-content .article-next {
+    position: absolute;
+    color: #0e83cd;
+    margin-bottom: 24px;
+    text-decoration: none;
+    font-weight: bold;
+    font-family: Muli, avenir, helvetica neue, helvetica, ubuntu, roboto, noto, segoe ui, arial, sans-serif;
+    text-transform: uppercase;
+}
+.main-content .article-prev {
+    left: 0;
+}
+.main-content .article-next {
+    right: 0;
+}
+.fa {
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transform: translate(0, 0);
+}
+.fa-chevron-left:before {
+    content: "\f053";
+}
 
 /* categories
 ---------------------------------------------- */
@@ -267,6 +298,8 @@ body {
 .main-content__inner .tag-list a {
     display: block;
     color: #333;
+    font-family: FreeSans, Arimo, Arial, SimSun, "宋体", Heiti, "黑体", sans-serif;
+    font-size: 14px;
 }
 .main-content__inner .tag-list a:hover {
     color: aquamarine;
@@ -282,6 +315,7 @@ body {
 }
 .main-content__inner .article-list .date {
     display: inline-block;
+    width: 80px;
     font-style: normal;
     margin-right: 20px;
     font-size: 16px;
@@ -307,7 +341,7 @@ body {
     margin: 0 10px;
 }
 .main-content__inner .archive-list h4 {
-    font-size: 22px;
+    font-size: 20px;
     margin: 10px 0;
 }
 .main-content__inner .archive-list .item {
@@ -315,7 +349,8 @@ body {
 }
 .main-content__inner .archive-list a {
     display: inline-block;
-    font-size: 16px;
+    font-size: 15px;
+    line-height: 1.5;
     color: #333;
 }
 .main-content__inner .archive-list a:hover {
@@ -372,7 +407,9 @@ body {
 /* about
 ---------------------------------------------- */
 .main-content__inner.about .introduce {
+    font-family: Georgia, serif;
     margin-top: 24px;
+    line-height: 1.4;
 }
 
 .main-content__inner.about .introduce p {

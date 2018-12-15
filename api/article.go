@@ -72,7 +72,7 @@ func GetArticleList(c *gin.Context) {
 		pageNumInt = 1
 	}
 
-	articles, total, err := models.ReadArticleList(title, cStartAt, cEndAt, uStartAt, uEndAt,
+	articles, total, err := models.GetArticleList(title, cStartAt, cEndAt, uStartAt, uEndAt,
 		uint(cidUint64), uint(tidUint64),
 		pageSizeInt, pageNumInt)
 	if err != nil {

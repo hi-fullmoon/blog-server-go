@@ -17,8 +17,8 @@
                 <div class="article-item br-6 bs-2">
                     <h3><a href="/articles/{{ .ID }}">{{ .Title }}</a></h3>
                     <p class="title-bottom">
-                        该文章发表于<em>{{ .CreatedAt }}</em>&nbsp;&nbsp;·&nbsp;
-                        访问次数为<em>{{ .ViewCount }}</em> 次
+                        该文章发表于 <em>{{ .YearAt }}/{{ .MonthAt }}/{{ .DayAt }}</em>&nbsp;&nbsp;·&nbsp;
+                        访问次数为 <em>{{ .ViewCount }}</em> 次
                     </p>
                     <div class="content">
                         <p class="desc">{{ .Desc }}</p>
@@ -28,11 +28,24 @@
                     </div>
                     <p style="height: 21px;">
                         {{ range .Tags }}
-                            <span class="tag"><a href="/tags/{{ .ID }}">{{ .Name }}</a></span>
+                            <span class="tag"><a href="/tags/{{ .Name }}">{{ .Name }}</a></span>
                         {{ end }}
                     </p>
                     <a class="button" href="/articles/{{ .ID }}">阅读全文</a>
                 </div>
+            {{ end }}
+        </div>
+
+        <div class="pagination">
+            {{ if gt .PrevPageNo 0 }}
+                <a href="/?page={{ .PrevPageNo }}" class="article-prev">
+                    <i class="icon"></i><span>&lt;上一页</span>
+                </a>
+            {{ end }}
+            {{ if gt .NextPageNo 0 }}
+                <a href="/?page={{ .NextPageNo }}" class="article-next">
+                    <span>下一页 &gt;</span><i class="icon"></i>
+                </a>
             {{ end }}
         </div>
     </section>

@@ -13,13 +13,18 @@
 
     <section class="main-content">
         <div class="main-content__inner tags br-6 bs-2">
-            <p>标签一</p>
+            <p>{{ .TagName }}</p>
             <ul class="article-list">
-                <li><em class="date">2018-12-13</em><a class="title" href="/articles/1">我劝你早点归去</a></li>
-                <li><em class="date">2018-12-13</em><a class="title" href="">你说你不想归去</a></li>
-                <li><em class="date">2018-12-13</em><a class="title" href="">只叫我抱着你</a></li>
-                <li><em class="date">2018-12-13</em><a class="title" href="">你已令我快乐，我也令你痴痴醉</a></li>
-                <li><em class="date">2018-12-13</em><a class="title" href="">眼泪默默垂</a></li>
+                {{ if .Articles }}
+                    {{ range .Articles }}
+                        <li>
+                            <em class="date">{{ .YearAt }}-{{ .MonthAt }}-{{ .DayAt }}</em>
+                            <a class="title" href="/articles/{{ .ID }}">{{ .Title }}</a>
+                        </li>
+                    {{ end }}
+                {{ else }}
+                    <li>作者还没有开始写相关的文章哦···</li>
+                {{ end }}
             </ul>
         </div>
     </section>

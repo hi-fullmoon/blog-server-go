@@ -2,6 +2,7 @@ package models
 
 import (
 	"log"
+	"time"
 )
 
 import "github.com/jinzhu/gorm"
@@ -41,11 +42,14 @@ type Article struct {
 	Desc       string `gorm:"size:200"`
 	Content    string `gorm:"size:5000"`
 	LikeCount  int
-	ViewCount  int `gorm:"default:0"`
+	ViewCount  int
 	CoverImage string
 	CategoryID uint
 	Category   Category
 	Tags       []Tag `gorm:"many2many:article_tags;"`
+	YearAt     int
+	MonthAt    int
+	DayAt      int
 }
 
 type Comment struct {
@@ -130,7 +134,7 @@ func CreateCategory(name, desc string) error {
 }
 
 // read category list by name
-func ReadCategoryList(name string) ([]*Category, error) {
+func GetCategoryList(name string) ([]*Category, error) {
 	var categories []*Category
 	db := db
 
@@ -188,7 +192,7 @@ func CreateTag(name string) error {
 }
 
 // read tags by name
-func ReadTagList(name string, pageSize, pageNum int) ([]*Tag, int, error) {
+func GetTagList(name string, pageSize, pageNum int) ([]*Tag, int, error) {
 	var tags []*Tag
 	db := db
 
@@ -250,11 +254,16 @@ func GetTagCount() (int, error) {
 func CreateArticle(categoryId uint, title, desc, content string, tagIds []uint) error {
 	var article Article
 
+	nowTime := time.Now()
+
 	article = Article{
 		Title:      title,
 		CategoryID: categoryId,
 		Desc:       desc,
 		Content:    content,
+		YearAt:     nowTime.Year(),
+		MonthAt:    int(nowTime.Month()),
+		DayAt:      nowTime.Day(),
 	}
 
 	if err = db.Create(&article).Error; err != nil {
@@ -270,9 +279,8 @@ func CreateArticle(categoryId uint, title, desc, content string, tagIds []uint) 
 }
 
 // read article list
-func ReadArticleList(title, createdStartAt, createdEndAt, updatedStartAt, updatedEndAt string,
-	categoryId, tagId uint,
-	pageSize, pageNum int) ([]*Article, int, error) {
+func GetArticleList(title, createdStartAt, createdEndAt, updatedStartAt, updatedEndAt string,
+	categoryId, tagId uint, pageSize, pageNum int) ([]*Article, int, error) {
 	var articles []*Article
 	db := db
 	if tagId != 0 {
@@ -318,6 +326,90 @@ func ReadArticleList(title, createdStartAt, createdEndAt, updatedStartAt, update
 	}
 
 	return articles, pageTotal, nil
+}
+
+// get article list by article name
+func GetArticleListByArticleTitle(articleTitle string) ([]*Article, error) {
+	var articles []*Article
+	db := db
+	db = db.Where("title LIKE ?", "%"+articleTitle+"%").Select("id, title").Order("created_at DESC").Find(&articles)
+
+	if err = db.Error; err != nil {
+		return []*Article{}, err
+	}
+
+	return articles, nil
+}
+
+// get article list by tag name
+func GetArticleListByTagName(tagName string) ([]*Article, error) {
+	var articles []*Article
+	db := db
+	if tagName != "" {
+		db = db.Table("tags").
+			Select("articles.*").
+			Joins("INNER JOIN article_tags ON tags.id = article_tags.tag_id").
+			Joins("INNER JOIN articles ON article_tags.article_id = articles.id").
+			Where("tags.name = ? AND articles.deleted_at IS NULL", tagName)
+	}
+
+	db = db.Preload("Tags").Order("created_at DESC").Find(&articles)
+
+	if err = db.Error; err != nil {
+		return []*Article{}, err
+	}
+
+	return articles, nil
+}
+
+// get article list by category name
+func GetArticleListByCategoryName(categoryName string) ([]*Article, error) {
+	var articles []*Article
+	db := db
+
+	db = db.Table("categories").
+		Where("name = ?", categoryName).
+		Select("articles.*").
+		Joins("INNER JOIN articles ON articles.category_id = categories.id").
+		Order("created_at DESC").
+		Find(&articles)
+
+	if err = db.Error; err != nil {
+		return []*Article{}, err
+	}
+
+	return articles, nil
+}
+
+// get article list by group
+// TODO：need to be modified.
+func GetArticleByGroup() ([]map[string]interface{}, error) {
+	var articles []*Article
+	var yearAt, monthAt int
+
+	rows, err := db.Table("articles").Select("year_at, month_at").Group("year_at, month_at").Order("year_at, month_at DESC").Rows()
+	if err = db.Error; err != nil {
+		return nil, err
+	}
+
+	out := make([]map[string]interface{}, 0, 10)
+
+	for rows.Next() {
+		rows.Scan(&yearAt, &monthAt)
+
+		res := db.Where("year_at = ? AND month_at = ?", yearAt, monthAt).Select("id, year_at, month_at, day_at, title").Order("created_at DESC").Find(&articles)
+		if res.Error != nil {
+			return nil, err
+		}
+		m := map[string]interface{}{
+			"YearAt":   yearAt,
+			"MonthAt":  monthAt,
+			"Articles": articles,
+		}
+		out = append(out, m)
+	}
+
+	return out, nil
 }
 
 // read article information by aid

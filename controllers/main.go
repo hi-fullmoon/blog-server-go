@@ -1,8 +1,10 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
+	"zhengbiwen/blog_management_system/api"
 	"zhengbiwen/blog_management_system/models"
 
 	"github.com/gin-gonic/gin"
@@ -30,10 +32,40 @@ func getCount() (int, int, int) {
 func Home(c *gin.Context) {
 	aCount, cCount, tCount := getCount()
 
-	articles, _, err := models.ReadArticleList("", "", "", "", "", 0, 0, 0, 0)
+	pageNo := c.Query("page")
+	pageNoInt, err := strconv.Atoi(pageNo)
 	if err != nil {
-		articles = nil
+		pageNoInt = 1
 	}
+	if pageNoInt < 0 {
+		pageNoInt = 1
+	}
+
+	pageSize := c.Query("page_size")
+	pageSizeInt, err := strconv.Atoi(pageSize)
+	if err != nil {
+		pageSizeInt = 10
+	}
+	if pageSizeInt > 10 {
+		pageSizeInt = 10
+	}
+
+	articles, total, _ := models.GetArticleList("", "", "", "", "", 0, 0, pageSizeInt, pageNoInt)
+
+	var prevPageNo, nextPageNo int
+	if pageNoInt <= 0 {
+		prevPageNo = 0
+	} else {
+		prevPageNo = pageNoInt - 1
+	}
+
+	if pageNoInt*pageSizeInt < total {
+		nextPageNo = pageNoInt + 1
+	} else {
+		nextPageNo = 0
+	}
+
+	fmt.Println("------>", prevPageNo, nextPageNo, pageSizeInt, total)
 
 	c.HTML(http.StatusOK, "home.html", gin.H{
 		"Page":          "home",
@@ -41,50 +73,72 @@ func Home(c *gin.Context) {
 		"CategoryCount": cCount,
 		"TagCount":      tCount,
 		"Articles":      articles,
+		"PageTotal":     total,
+		"PrevPageNo":    prevPageNo,
+		"NextPageNo":    nextPageNo,
 	})
 }
 
 func CategoryList(c *gin.Context) {
 	aCount, cCount, tCount := getCount()
 
+	categoryList, _ := models.GetCategoryList("")
+
 	c.HTML(http.StatusOK, "category.html", gin.H{
 		"Page":          "category",
 		"ArticleCount":  aCount,
 		"CategoryCount": cCount,
 		"TagCount":      tCount,
+		"CategoryList":  categoryList,
 	})
 }
 
 func CategoryArticles(c *gin.Context) {
 	aCount, cCount, tCount := getCount()
 
+	categoryName := c.Param("cName")
+
+	articles, _ := models.GetArticleListByCategoryName(categoryName)
+	fmt.Println("xxxx", articles)
+
 	c.HTML(http.StatusOK, "category-articles.html", gin.H{
 		"Page":          "category",
 		"ArticleCount":  aCount,
 		"CategoryCount": cCount,
 		"TagCount":      tCount,
+		"CategoryName":  categoryName,
+		"Articles":      articles,
 	})
 }
 
 func TagList(c *gin.Context) {
 	aCount, cCount, tCount := getCount()
 
+	tags, _, _ := models.GetTagList("", 1000, 0)
+
 	c.HTML(http.StatusOK, "tag.html", gin.H{
 		"Page":          "tag",
 		"ArticleCount":  aCount,
 		"CategoryCount": cCount,
 		"TagCount":      tCount,
+		"Tags":          tags,
 	})
 }
 
 func TagArticles(c *gin.Context) {
 	aCount, cCount, tCount := getCount()
 
+	tagName := c.Param("tName")
+
+	articles, _ := models.GetArticleListByTagName(tagName)
+
 	c.HTML(http.StatusOK, "tag-articles.html", gin.H{
 		"Page":          "tag",
 		"ArticleCount":  aCount,
 		"CategoryCount": cCount,
 		"TagCount":      tCount,
+		"TagName":       tagName,
+		"Articles":      articles,
 	})
 }
 
@@ -99,22 +153,31 @@ func Article(c *gin.Context) {
 
 	models.UpdateArticleViewCount(uint(aidUint64))
 
+	article, err := models.ReadArticleInfo(uint(aidUint64))
+	if err != nil {
+
+	}
+
 	c.HTML(http.StatusOK, "article.html", gin.H{
 		"Page":          "",
 		"ArticleCount":  aCount,
 		"CategoryCount": cCount,
 		"TagCount":      tCount,
+		"Article":       article,
 	})
 }
 
 func Archive(c *gin.Context) {
 	aCount, cCount, tCount := getCount()
 
+	m, _ := models.GetArticleByGroup()
+
 	c.HTML(http.StatusOK, "archive.html", gin.H{
 		"Page":          "archive",
 		"ArticleCount":  aCount,
 		"CategoryCount": cCount,
 		"TagCount":      tCount,
+		"DateLine":      m,
 	})
 }
 
@@ -137,5 +200,36 @@ func MessageBoard(c *gin.Context) {
 		"ArticleCount":  aCount,
 		"CategoryCount": cCount,
 		"TagCount":      tCount,
+	})
+}
+
+func GetArticlesByTitle(c *gin.Context) {
+	title := c.Query("title")
+
+	articles, err := models.GetArticleListByArticleTitle(title)
+
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"code":    api.StatusFail,
+			"message": "获取结果失败",
+		})
+		return
+	}
+
+	m := make(map[string]interface{})
+	out := make([]map[string]interface{}, 0, 10)
+
+	for _, article := range articles {
+		m = map[string]interface{}{
+			"id":    article.ID,
+			"title": article.Title,
+		}
+		out = append(out, m)
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"code":    api.StatusSuccess,
+		"message": "获取结果成功",
+		"data":    out,
 	})
 }
