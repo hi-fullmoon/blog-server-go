@@ -3,7 +3,7 @@ package api
 import (
 	"net/http"
 	"strconv"
-	"zhengbiwen/blog_management_system/models"
+	"zhengbiwen/blog-server/models"
 
 	"github.com/gin-gonic/gin"
 )

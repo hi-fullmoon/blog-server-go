@@ -19,7 +19,7 @@ $(function () {
 
     $('.js-search-input').on('input', debounce(function () {
         getArticles();
-    }, 400));
+    }, 500));
 
     // get articles
     function getArticles() {
@@ -67,9 +67,7 @@ $(function () {
     });
 
     // loading done
-    setTimeout(function () {
-        NProgress.done();
-    }, 1000);
+    NProgress.done();
 });
 
 /**
@@ -81,9 +79,11 @@ $(function () {
 function debounce(method, delay) {
     var timer = null;
     return function () {
-        var self = this,
-            args = arguments;
+        var self = this;
+        var args = arguments;
+
         timer && clearTimeout(timer);
+
         timer = setTimeout(function () {
             method.apply(self, args);
         }, delay);

@@ -2,8 +2,8 @@ package routers
 
 import (
 	"net/http"
-	"zhengbiwen/blog_management_system/api"
-	"zhengbiwen/blog_management_system/controllers"
+	"zhengbiwen/blog-server/api"
+	"zhengbiwen/blog-server/controllers"
 
 	"github.com/gin-gonic/gin"
 )
@@ -33,7 +33,7 @@ func InitRouter() *gin.Engine {
 
 	admin := r.Group("/api/admin")
 	{
-		admin.POST("/user/login", api.Login)
+		admin.POST("/login", api.Login)
 
 		admin.Use(api.ValidateUserSession())
 

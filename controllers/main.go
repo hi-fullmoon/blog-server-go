@@ -1,11 +1,10 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
-	"zhengbiwen/blog_management_system/api"
-	"zhengbiwen/blog_management_system/models"
+	"zhengbiwen/blog-server/api"
+	"zhengbiwen/blog-server/models"
 
 	"github.com/gin-gonic/gin"
 )
@@ -65,8 +64,6 @@ func Home(c *gin.Context) {
 		nextPageNo = 0
 	}
 
-	fmt.Println("------>", prevPageNo, nextPageNo, pageSizeInt, total)
-
 	c.HTML(http.StatusOK, "home.html", gin.H{
 		"Page":          "home",
 		"ArticleCount":  aCount,
@@ -99,7 +96,6 @@ func CategoryArticles(c *gin.Context) {
 	categoryName := c.Param("cName")
 
 	articles, _ := models.GetArticleListByCategoryName(categoryName)
-	fmt.Println("xxxx", articles)
 
 	c.HTML(http.StatusOK, "category-articles.html", gin.H{
 		"Page":          "category",
@@ -153,10 +149,7 @@ func Article(c *gin.Context) {
 
 	models.UpdateArticleViewCount(uint(aidUint64))
 
-	article, err := models.ReadArticleInfo(uint(aidUint64))
-	if err != nil {
-
-	}
+	article, _ := models.ReadArticleInfo(uint(aidUint64))
 
 	c.HTML(http.StatusOK, "article.html", gin.H{
 		"Page":          "",

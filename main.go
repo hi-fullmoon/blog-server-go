@@ -1,9 +1,9 @@
 package main
 
 import (
-	"zhengbiwen/blog_management_system/models"
-	"zhengbiwen/blog_management_system/routers"
-	"zhengbiwen/blog_management_system/session"
+	"zhengbiwen/blog-server/models"
+	"zhengbiwen/blog-server/routers"
+	"zhengbiwen/blog-server/session"
 )
 
 func main() {

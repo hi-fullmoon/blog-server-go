@@ -1,10 +1,9 @@
 package session
 
 import (
-	"log"
 	"sync"
 	"time"
-	"zhengbiwen/blog_management_system/models"
+	"zhengbiwen/blog-server/models"
 
 	"github.com/satori/go.uuid"
 )
@@ -40,7 +39,6 @@ func GenerateNewSessionId(uid uint) string {
 
 	if session, ok := sessionMap.Load(uid); ok {
 		sessionId = session.(*models.Session).SessionID
-		log.Println("session id is exist: ", sessionId)
 	} else {
 		sid, _ := uuid.NewV4()
 		sessionId = sid.String()

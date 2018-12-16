@@ -37,7 +37,7 @@ func UploadImg(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"code":    StatusSuccess,
-		"message": "上传成功",
+		"message": "上传图片成功",
 		"data": map[string]string{
 			"img_url": "/upload/images/" + uuid.String() + ".jpg",
 		},
