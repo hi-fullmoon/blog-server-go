@@ -251,7 +251,7 @@ func GetTagCount() (int, error) {
 }
 
 // create article
-func CreateArticle(categoryId uint, title, desc, content string, tagIds []uint) error {
+func CreateArticle(categoryId uint, title, desc, content, image string, tagIds []uint) error {
 	var article Article
 
 	nowTime := time.Now()
@@ -261,6 +261,7 @@ func CreateArticle(categoryId uint, title, desc, content string, tagIds []uint) 
 		CategoryID: categoryId,
 		Desc:       desc,
 		Content:    content,
+		CoverImage: image,
 		YearAt:     nowTime.Year(),
 		MonthAt:    int(nowTime.Month()),
 		DayAt:      nowTime.Day(),
@@ -423,13 +424,14 @@ func ReadArticleInfo(aid uint) (*Article, error) {
 }
 
 // update article
-func UpdateArticle(aid, categoryId uint, title, desc, content string, tagIds []uint) error {
+func UpdateArticle(aid, categoryId uint, title, desc, content, image string, tagIds []uint) error {
 	var article Article
 	res := db.Where("id = ?", aid).Model(&article).Updates(map[string]interface{}{
 		"category_id": categoryId,
 		"title":       title,
 		"desc":        desc,
 		"content":     content,
+		"cover_image": image,
 	})
 	if err = res.Error; err != nil {
 		return err

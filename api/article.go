@@ -15,6 +15,7 @@ type articleDataIn struct {
 	Desc       string `json:"desc"`
 	Content    string `json:"content"`
 	TagIds     []uint `json:"tag_ids"`
+	CoverImage string `json:"cover_image"`
 }
 
 func AddArticle(c *gin.Context) {
@@ -34,8 +35,9 @@ func AddArticle(c *gin.Context) {
 	desc := article.Desc
 	content := article.Content
 	tags := article.TagIds
+	image := article.CoverImage
 
-	err = models.CreateArticle(cid, title, desc, content, tags)
+	err = models.CreateArticle(cid, title, desc, content, image, tags)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"code":    StatusFail,
@@ -156,6 +158,7 @@ func GetArticleInfo(c *gin.Context) {
 		"category_id":   info.CategoryID,
 		"category_name": info.Category.Name,
 		"tags":          tags,
+		"cover_image":   info.CoverImage,
 	}
 
 	c.JSON(http.StatusOK, gin.H{
@@ -209,8 +212,9 @@ func UpdateArticle(c *gin.Context) {
 	desc := article.Desc
 	content := article.Content
 	tags := article.TagIds
+	image := article.CoverImage
 
-	err = models.UpdateArticle(aid, cid, title, desc, content, tags)
+	err = models.UpdateArticle(aid, cid, title, desc, content, image, tags)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"code":    StatusFail,
