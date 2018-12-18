@@ -14,13 +14,22 @@ func AddCategory(c *gin.Context) {
 	if err = c.ShouldBindJSON(&category); err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"code":    StatusFail,
-			"message": "添加失败",
+			"message": "参数格式有误",
 		})
 		return
 	}
 
 	name := category.Name
 	desc := category.Desc
+
+	if _, isExist := models.CheckCategoryExistByName(name); isExist {
+		c.JSON(http.StatusOK, gin.H{
+			"code":    StatusFail,
+			"message": "添加失败，该分类名称已经存在",
+		})
+		return
+	}
+
 	if err = models.CreateCategory(name, desc); err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"code":    StatusFail,
@@ -115,6 +124,14 @@ func UpdateCategory(c *gin.Context) {
 	cid := category.ID
 	cname := category.Name
 	cdesc := category.Desc
+
+	if res, isExist := models.CheckCategoryExistByName(cname); res.ID != cid && isExist {
+		c.JSON(http.StatusOK, gin.H{
+			"code":    StatusFail,
+			"message": "添加失败，该分类名称已经存在",
+		})
+		return
+	}
 
 	err := models.UpdateCategory(cid, cname, cdesc)
 	if err != nil {

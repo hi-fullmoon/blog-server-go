@@ -14,12 +14,20 @@ func AddTag(c *gin.Context) {
 	if err = c.ShouldBindJSON(&tag); err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"code":    StatusFail,
-			"message": "添加标签失败",
+			"message": "参数格式有误",
 		})
 		return
 	}
 
 	name := tag.Name
+	if _, isExist := models.CheckTagExistByName(name); isExist {
+		c.JSON(http.StatusOK, gin.H{
+			"code":    StatusFail,
+			"message": "添加标签失败，该标签名称已经存在",
+		})
+		return
+	}
+
 	if err = models.CreateTag(name); err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"code":    StatusFail,
@@ -129,6 +137,14 @@ func UpdateTag(c *gin.Context) {
 
 	tid := tag.ID
 	cname := tag.Name
+
+	if res, isExist := models.CheckTagExistByName(cname); res.ID != tid && isExist {
+		c.JSON(http.StatusOK, gin.H{
+			"code":    StatusFail,
+			"message": "添加标签失败，该标签名称已经存在",
+		})
+		return
+	}
 
 	err := models.UpdateTag(tid, cname)
 	if err != nil {

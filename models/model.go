@@ -12,7 +12,7 @@ type User struct {
 	gorm.Model
 	Account     string
 	Password    string
-	NickName    string
+	NickName    string `gorm:"size:10"`
 	Email       string
 	Province    string
 	City        string
@@ -40,7 +40,7 @@ type Article struct {
 	gorm.Model
 	Title      string `gorm:"size:30"`
 	Desc       string `gorm:"size:200"`
-	Content    string `gorm:"size:5000"`
+	Content    string `gorm:"size:6000"`
 	LikeCount  int
 	ViewCount  int
 	CoverImage string
@@ -124,6 +124,15 @@ func UpdateUserPassword(id uint, pwd string) error {
 	return nil
 }
 
+// judging whether it exists by tag name
+func CheckCategoryExistByName(name string) (*Category, bool) {
+	var category Category
+	if err = db.Where("name = ?", name).First(&category).Error; err != nil {
+		return &category, false
+	}
+	return &category, true
+}
+
 // create category
 func CreateCategory(name, desc string) error {
 	category := Category{Name: name, Desc: desc}
@@ -179,6 +188,15 @@ func GetCategoryCount() (int, error) {
 		return 0, err
 	}
 	return count, nil
+}
+
+// judging whether it exists by tag name
+func CheckTagExistByName(name string) (*Tag, bool ){
+	var tag Tag
+	if err = db.Where("name = ?", name).First(&tag).Error; err != nil {
+		return &tag, false
+	}
+	return &tag, true
 }
 
 // create tag
