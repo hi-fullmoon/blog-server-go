@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 	"zhengbiwen/blog-server/models"
+	"zhengbiwen/blog-server/utils"
 
 	"github.com/gin-gonic/gin"
 )
@@ -13,7 +14,7 @@ func AddCategory(c *gin.Context) {
 	var err error
 	if err = c.ShouldBindJSON(&category); err != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"code":    StatusFail,
+			"code":    utils.StatusFail,
 			"message": "参数格式有误",
 		})
 		return
@@ -24,7 +25,7 @@ func AddCategory(c *gin.Context) {
 
 	if _, isExist := models.CheckCategoryExistByName(name); isExist {
 		c.JSON(http.StatusOK, gin.H{
-			"code":    StatusFail,
+			"code":    utils.StatusFail,
 			"message": "添加失败，该分类名称已经存在",
 		})
 		return
@@ -32,13 +33,13 @@ func AddCategory(c *gin.Context) {
 
 	if err = models.CreateCategory(name, desc); err != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"code":    StatusFail,
+			"code":    utils.StatusFail,
 			"message": "添加失败",
 		})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"code":    StatusSuccess,
+		"code":    utils.StatusSuccess,
 		"message": "添加成功",
 	})
 }
@@ -48,7 +49,7 @@ func GetCategoryList(c *gin.Context) {
 	categories, err := models.GetCategoryList(name)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"code":    StatusFail,
+			"code":    utils.StatusFail,
 			"message": "获取分类列表失败",
 		})
 	}
@@ -69,7 +70,7 @@ func GetCategoryList(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"code":    StatusSuccess,
+		"code":    utils.StatusSuccess,
 		"message": "获取分类列表成功",
 		"data":    out,
 	})
@@ -80,7 +81,7 @@ func DeleteCategory(c *gin.Context) {
 
 	if cid == "" {
 		c.JSON(http.StatusOK, gin.H{
-			"code":    StatusFail,
+			"code":    utils.StatusFail,
 			"message": "删除失败",
 		})
 		return
@@ -89,7 +90,7 @@ func DeleteCategory(c *gin.Context) {
 	cidUint64, err := strconv.ParseUint(cid, 10, 64)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"code":    StatusFail,
+			"code":    utils.StatusFail,
 			"message": "参数有误",
 		})
 		return
@@ -98,14 +99,14 @@ func DeleteCategory(c *gin.Context) {
 	err = models.DeleteCategory(uint(cidUint64))
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"code":    StatusFail,
+			"code":    utils.StatusFail,
 			"message": "删除失败",
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"code":    StatusSuccess,
+		"code":    utils.StatusSuccess,
 		"message": "删除成功",
 	})
 }
@@ -115,7 +116,7 @@ func UpdateCategory(c *gin.Context) {
 
 	if err := c.ShouldBindJSON(&category); err != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"code":    StatusFail,
+			"code":    utils.StatusFail,
 			"message": "参数有误",
 		})
 		return
@@ -127,7 +128,7 @@ func UpdateCategory(c *gin.Context) {
 
 	if res, isExist := models.CheckCategoryExistByName(cname); res.ID != cid && isExist {
 		c.JSON(http.StatusOK, gin.H{
-			"code":    StatusFail,
+			"code":    utils.StatusFail,
 			"message": "添加失败，该分类名称已经存在",
 		})
 		return
@@ -136,14 +137,14 @@ func UpdateCategory(c *gin.Context) {
 	err := models.UpdateCategory(cid, cname, cdesc)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"code":    StatusFail,
+			"code":    utils.StatusFail,
 			"message": "更新失败",
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"code":    StatusSuccess,
+		"code":    utils.StatusSuccess,
 		"message": "更新成功",
 	})
 }

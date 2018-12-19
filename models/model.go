@@ -1,12 +1,14 @@
 package models
 
 import (
+	"fmt"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
+
 	"log"
 	"time"
+	"zhengbiwen/blog-server/utils"
 )
-
-import "github.com/jinzhu/gorm"
-import _ "github.com/jinzhu/gorm/dialects/mysql"
 
 type User struct {
 	gorm.Model
@@ -74,12 +76,28 @@ var (
 
 // init db
 func InitDB() (*gorm.DB, error) {
-	db, err = gorm.Open("mysql", "root:123456@tcp(localhost:3306)/blog?charset=utf8&parseTime=True&loc=Local")
+	sec, err := utils.ConfFile.GetSection("database")
+	if err != nil {
+		log.Fatal(2, "Fail to get section `database`': %v", err)
+	}
+
+	dbType := sec.Key("DB_TYPE").String()
+	dbName := sec.Key("DB_NAME").String()
+	username := sec.Key("USERNAME").String()
+	password := sec.Key("PASSWORD").String()
+	dbHost := sec.Key("DB_HOST").String()
+	logMode, _ := sec.Key("LOG_MODE").Bool()
+
+	db, err = gorm.Open(dbType,
+		fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
+			username, password, dbHost, dbName,
+		))
+
 	if err != nil {
 		return nil, err
 	}
 
-	db.LogMode(true)
+	db.LogMode(logMode)
 
 	db.DB().SetMaxIdleConns(10)
 	db.DB().SetMaxOpenConns(100)
@@ -191,7 +209,7 @@ func GetCategoryCount() (int, error) {
 }
 
 // judging whether it exists by tag name
-func CheckTagExistByName(name string) (*Tag, bool ){
+func CheckTagExistByName(name string) (*Tag, bool) {
 	var tag Tag
 	if err = db.Where("name = ?", name).First(&tag).Error; err != nil {
 		return &tag, false

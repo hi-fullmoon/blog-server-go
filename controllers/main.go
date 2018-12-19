@@ -3,8 +3,8 @@ package controllers
 import (
 	"net/http"
 	"strconv"
-	"zhengbiwen/blog-server/api"
 	"zhengbiwen/blog-server/models"
+	"zhengbiwen/blog-server/utils"
 
 	"github.com/gin-gonic/gin"
 )
@@ -203,7 +203,7 @@ func GetArticlesByTitle(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"code":    api.StatusFail,
+			"code":    utils.StatusFail,
 			"message": "获取结果失败",
 		})
 		return
@@ -221,7 +221,7 @@ func GetArticlesByTitle(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"code":    api.StatusSuccess,
+		"code":    utils.StatusSuccess,
 		"message": "获取结果成功",
 		"data":    out,
 	})

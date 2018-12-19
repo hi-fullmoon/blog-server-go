@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"zhengbiwen/blog-server/api"
 	"zhengbiwen/blog-server/controllers"
+	"zhengbiwen/blog-server/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -35,7 +36,7 @@ func InitRouter() *gin.Engine {
 	{
 		admin.POST("/login", api.Login)
 
-		admin.Use(api.ValidateUserSession())
+		admin.Use(middleware.ValidateUserSession())
 
 		admin.GET("/user/:uid", api.GetUser)
 		admin.PATCH("/user", api.UpdateUser)

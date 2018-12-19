@@ -32,3 +32,11 @@ func DeleteSession(uid uint) error {
 	}
 	return nil
 }
+
+func DeleteSessionsByTTL(ttl int64) error {
+	var ses []Session
+	if err := db.Where("ttl < ?", ttl).Unscoped().Delete(&ses).Error; err != nil {
+		return err
+	}
+	return nil
+}

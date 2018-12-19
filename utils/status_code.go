@@ -1,4 +1,4 @@
-package api
+package utils
 
 const (
 	StatusSuccess  int = 0

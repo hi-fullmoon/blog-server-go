@@ -12,6 +12,9 @@ a {
 html * {
     box-sizing: border-box;
 }
+ol li {
+    list-style: none;
+}
 
 /* common
 ---------------------------------------------- */

@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 	"zhengbiwen/blog-server/models"
+	"zhengbiwen/blog-server/utils"
 
 	"github.com/gin-gonic/gin"
 )
@@ -24,7 +25,7 @@ func AddArticle(c *gin.Context) {
 
 	if err = c.ShouldBindJSON(&article); err != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"code":    StatusFail,
+			"code":    utils.StatusFail,
 			"message": "参数有误",
 		})
 		return
@@ -40,13 +41,13 @@ func AddArticle(c *gin.Context) {
 	err = models.CreateArticle(cid, title, desc, content, image, tags)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"code":    StatusFail,
+			"code":    utils.StatusFail,
 			"message": "添加文章失败",
 		})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"code":    StatusSuccess,
+		"code":    utils.StatusSuccess,
 		"message": "添加文章成功",
 	})
 }
@@ -79,7 +80,7 @@ func GetArticleList(c *gin.Context) {
 		pageSizeInt, pageNumInt)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"code":    StatusFail,
+			"code":    utils.StatusFail,
 			"message": "获取文章列表失败",
 		})
 		return
@@ -111,7 +112,7 @@ func GetArticleList(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"code":    StatusSuccess,
+		"code":    utils.StatusSuccess,
 		"message": "获取文章列表成功",
 		"data": map[string]interface{}{
 			"list":      out,
@@ -127,7 +128,7 @@ func GetArticleInfo(c *gin.Context) {
 	aidUint64, err := strconv.ParseUint(aid, 10, 64)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"code":    StatusFail,
+			"code":    utils.StatusFail,
 			"message": "参数有误",
 		})
 		return
@@ -136,7 +137,7 @@ func GetArticleInfo(c *gin.Context) {
 	info, err := models.ReadArticleInfo(uint(aidUint64))
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"code":    StatusFail,
+			"code":    utils.StatusFail,
 			"message": "获取文章详情失败",
 		})
 		return
@@ -162,7 +163,7 @@ func GetArticleInfo(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"code":    StatusSuccess,
+		"code":    utils.StatusSuccess,
 		"message": "获取文章详情成功",
 		"data":    out,
 	})
@@ -173,7 +174,7 @@ func DeleteArticle(c *gin.Context) {
 	aidUint64, err := strconv.ParseUint(aid, 10, 64)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"code":    StatusFail,
+			"code":    utils.StatusFail,
 			"message": "参数有误",
 		})
 		return
@@ -182,14 +183,14 @@ func DeleteArticle(c *gin.Context) {
 	err = models.DeleteArticle(uint(aidUint64))
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"code":    StatusFail,
+			"code":    utils.StatusFail,
 			"message": "删除文章失败",
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"code":    StatusSuccess,
+		"code":    utils.StatusSuccess,
 		"message": "删除文章成功",
 	})
 }
@@ -200,7 +201,7 @@ func UpdateArticle(c *gin.Context) {
 
 	if err = c.ShouldBindJSON(&article); err != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"code":    StatusFail,
+			"code":    utils.StatusFail,
 			"message": "参数有误",
 		})
 		return
@@ -217,13 +218,13 @@ func UpdateArticle(c *gin.Context) {
 	err = models.UpdateArticle(aid, cid, title, desc, content, image, tags)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"code":    StatusFail,
+			"code":    utils.StatusFail,
 			"message": "更新文章失败",
 		})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"code":    StatusSuccess,
+		"code":    utils.StatusSuccess,
 		"message": "更新文章成功",
 	})
 }

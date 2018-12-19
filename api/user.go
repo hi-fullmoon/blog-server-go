@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"zhengbiwen/blog-server/models"
 	"zhengbiwen/blog-server/session"
+	"zhengbiwen/blog-server/utils"
 
 	"github.com/gin-gonic/gin"
 )
@@ -15,7 +16,7 @@ func Login(c *gin.Context) {
 
 	if err = c.ShouldBindJSON(&user); err != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"code":    StatusFail,
+			"code":    utils.StatusFail,
 			"message": "参数有误",
 		})
 		return
@@ -24,7 +25,7 @@ func Login(c *gin.Context) {
 	res, err := models.GetUserByAccount(user.Account)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"code":    StatusFail,
+			"code":    utils.StatusFail,
 			"message": "登录失败，账户名不存在",
 		})
 		return
@@ -32,7 +33,7 @@ func Login(c *gin.Context) {
 
 	if res.Password != user.Password {
 		c.JSON(http.StatusOK, gin.H{
-			"code":    StatusFail,
+			"code":    utils.StatusFail,
 			"message": "登录失败，密码不正确",
 		})
 		return
@@ -42,14 +43,14 @@ func Login(c *gin.Context) {
 
 	if token == "" {
 		c.JSON(http.StatusOK, gin.H{
-			"code":    StatusFail,
+			"code":    utils.StatusFail,
 			"message": "生成token失败",
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"code":    StatusSuccess,
+		"code":    utils.StatusSuccess,
 		"message": "登录成功",
 		"data": map[string]interface{}{
 			"token":        token,
@@ -68,7 +69,7 @@ func GetUser(c *gin.Context) {
 	uidUint64, err := strconv.ParseUint(uid, 10, 64)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"code":    StatusFail,
+			"code":    utils.StatusFail,
 			"message": "参数有误",
 		})
 		return
@@ -77,14 +78,14 @@ func GetUser(c *gin.Context) {
 	user, err := models.GetUserById(uint(uidUint64))
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"code":    StatusFail,
+			"code":    utils.StatusFail,
 			"message": "获取用户信息失败",
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"code":    StatusSuccess,
+		"code":    utils.StatusSuccess,
 		"message": "获取用户信息成功",
 		"data": map[string]interface{}{
 			"id":           user.ID,
@@ -106,7 +107,7 @@ func UpdateUser(c *gin.Context) {
 
 	if err := c.ShouldBindJSON(&user); err != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"code":    StatusFail,
+			"code":    utils.StatusFail,
 			"message": "参数有误",
 		})
 		return
@@ -114,14 +115,14 @@ func UpdateUser(c *gin.Context) {
 
 	if err := models.UpdateUserInfo(&user); err != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"code":    StatusFail,
+			"code":    utils.StatusFail,
 			"message": "更新用户信息失败",
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"code":    StatusSuccess,
+		"code":    utils.StatusSuccess,
 		"message": "更新用户信息成功",
 	})
 }
@@ -138,7 +139,7 @@ func UpdateUserPwd(c *gin.Context) {
 
 	if err := c.ShouldBindJSON(&body); err != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"code":    StatusFail,
+			"code":    utils.StatusFail,
 			"message": "参数有误",
 		})
 		return
@@ -150,7 +151,7 @@ func UpdateUserPwd(c *gin.Context) {
 	res, err := models.GetUserById(uid)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"code":    StatusFail,
+			"code":    utils.StatusFail,
 			"message": "修改密码失败",
 		})
 		return
@@ -158,7 +159,7 @@ func UpdateUserPwd(c *gin.Context) {
 
 	if oldPwd != res.Password {
 		c.JSON(http.StatusOK, gin.H{
-			"code":    StatusFail,
+			"code":    utils.StatusFail,
 			"message": "修改密码失败，原密码不正确",
 		})
 		return
@@ -169,7 +170,7 @@ func UpdateUserPwd(c *gin.Context) {
 
 	if newPwd != rePwd {
 		c.JSON(http.StatusOK, gin.H{
-			"code":    StatusFail,
+			"code":    utils.StatusFail,
 			"message": "修改密码失败，新密码和原密码相同",
 		})
 		return
@@ -177,7 +178,7 @@ func UpdateUserPwd(c *gin.Context) {
 
 	if newPwd != rePwd {
 		c.JSON(http.StatusOK, gin.H{
-			"code":    StatusFail,
+			"code":    utils.StatusFail,
 			"message": "修改密码失败，两次输入的新密码不一样",
 		})
 		return
@@ -185,14 +186,14 @@ func UpdateUserPwd(c *gin.Context) {
 
 	if err := models.UpdateUserPassword(uid, newPwd); err != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"code":    StatusFail,
+			"code":    utils.StatusFail,
 			"message": "修改密码失败",
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"code":    StatusSuccess,
+		"code":    utils.StatusSuccess,
 		"message": "修改密码成功",
 	})
 }

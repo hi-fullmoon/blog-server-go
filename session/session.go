@@ -4,6 +4,7 @@ import (
 	"sync"
 	"time"
 	"zhengbiwen/blog-server/models"
+	"zhengbiwen/blog-server/utils"
 
 	"github.com/satori/go.uuid"
 )
@@ -44,7 +45,7 @@ func GenerateNewSessionId(uid uint) string {
 		sessionId = sid.String()
 
 		ct := nowInMilli()
-		ttl := ct + 60*60*1000
+		ttl := ct + utils.SessionAge*60*1000
 
 		s, err := models.CreateSession(sessionId, ttl, uid)
 		if err != nil {
@@ -59,8 +60,8 @@ func GenerateNewSessionId(uid uint) string {
 func IsSessionExpired(uid uint) (string, bool) {
 	if s, ok := sessionMap.Load(uid); ok {
 		ct := nowInMilli()
-		if s.(*models.Session).TTL < ct {
-			deleteIsExpiredSession(uid)
+		if s.(*models.Session).TTL < ct { // expired
+			deleteSessionByUid(uid)
 			return "", true
 		}
 
@@ -69,10 +70,26 @@ func IsSessionExpired(uid uint) (string, bool) {
 	return "", true
 }
 
-func deleteIsExpiredSession(uid uint) error {
+func deleteSessionByUid(uid uint) error {
 	if err := models.DeleteSession(uid); err != nil {
 		return err
 	}
 	sessionMap.Delete(uid)
+	return nil
+}
+
+func DeleteExpiredSessions() error {
+	ct := nowInMilli()
+	sessionMap.Range(func(key, value interface{}) bool {
+		if value.(*models.Session).TTL < ct {
+			sessionMap.Delete(key)
+		}
+		return true
+	})
+
+	err := models.DeleteSessionsByTTL(ct)
+	if err != nil {
+		return err
+	}
 	return nil
 }
