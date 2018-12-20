@@ -318,7 +318,7 @@ body {
 }
 .main-content__inner .article-list .date {
     display: inline-block;
-    width: 80px;
+    width: 86px;
     font-style: normal;
     margin-right: 20px;
     font-size: 16px;
@@ -387,6 +387,8 @@ body {
 }
 .main-content__inner .article-detail .image img {
     width: 100%;
+    margin-top: -10%;
+    vertical-align: top;
 }
 .main-content__inner .article-detail .content {
     padding-bottom: 20px;

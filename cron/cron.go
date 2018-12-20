@@ -9,7 +9,7 @@ import (
 func Run() {
 	c := cron.New()
 	// two o'clock a day
-	spec := "0 0 2 * * ?"
+	spec := "0 0 2,14 * * ?"
 	c.AddFunc(spec, func() {
 		session.DeleteExpiredSessions()
 	})

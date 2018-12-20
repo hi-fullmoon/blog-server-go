@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-	"time"
 	"zhengbiwen/blog-server/cron"
 	"zhengbiwen/blog-server/models"
 	"zhengbiwen/blog-server/routers"
@@ -20,8 +18,6 @@ func main() {
 		panic(err)
 	}
 	defer db.Close()
-
-	fmt.Println("xxxxx", time.Now().UnixNano()/1000000)
 
 	r := routers.InitRouter()
 	r.Run(utils.HTTPPort)
