@@ -2,6 +2,7 @@ package models
 
 import (
 	"fmt"
+
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 
@@ -292,6 +293,8 @@ func CreateArticle(categoryId uint, title, desc, content, image string, tagIds [
 
 	nowTime := time.Now()
 
+	fmt.Println("xxxx", nowTime.Format("2006-01"))
+
 	article = Article{
 		Title:      title,
 		CategoryID: categoryId,
@@ -433,11 +436,16 @@ func GetArticleByGroup() ([]map[string]interface{}, error) {
 
 	for rows.Next() {
 		rows.Scan(&yearAt, &monthAt)
+		res := db.
+			Where("year_at = ? AND month_at = ?", yearAt, monthAt).
+			Select("id, created_at, year_at, month_at, title").
+			Order("created_at DESC").
+			Find(&articles)
 
-		res := db.Where("year_at = ? AND month_at = ?", yearAt, monthAt).Select("id, year_at, month_at, day_at, title").Order("created_at DESC").Find(&articles)
 		if res.Error != nil {
 			return nil, err
 		}
+
 		m := map[string]interface{}{
 			"YearAt":   yearAt,
 			"MonthAt":  monthAt,

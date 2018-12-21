@@ -21,9 +21,9 @@
                         <h4>{{ .YearAt }}年{{ .MonthAt }}月</h4>
                         <ul>
                             {{ range .Articles }}
-                                <li class="item">
+                                <li class="item article-list">
                                     <a href="/articles/{{ .ID }}">
-                                        <em>{{ .MonthAt }}月{{ .DayAt }}日</em> {{ .Title }}
+                                        {{ .Title }} <em>({{ .CreatedAt.Format "2006-01-02" }})</em>
                                     </a>
                                 </li>
                             {{ end }}

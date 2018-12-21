@@ -18,8 +18,9 @@
                 {{ if .Articles }}
                     {{ range .Articles }}
                         <li>
-                            <em class="date">{{ .YearAt }}-{{ .MonthAt }}-{{ .DayAt }}</em>
-                            <a class="title" href="/articles/{{ .ID }}">{{ .Title }}</a>
+                            <a href="/articles/{{ .ID }}">
+                                {{ .Title }} <em>({{ .CreatedAt.Format "2006-01-02" }})</em>
+                            </a>
                         </li>
                     {{ end }}
                 {{ else }}
