@@ -17,7 +17,7 @@
                 <div class="article-item br-6 bs-2">
                     <h3><a href="/articles/{{ .ID }}">{{ .Title }}</a></h3>
                     <p class="title-bottom">
-                        该文章发表于 <em>{{ .YearAt }}/{{ .MonthAt }}/{{ .DayAt }}</em>&nbsp;&nbsp;·&nbsp;
+                        该文章发表于 <em>{{ .CreatedAt.Format "2006/01/02" }}</em>&nbsp;&nbsp;·&nbsp;
                         访问次数为 <em>{{ .ViewCount }}</em> 次
                     </p>
                     <div class="content">
