@@ -38,6 +38,8 @@ func InitRouter() *gin.Engine {
 
 		admin.Use(middleware.ValidateUserSession())
 
+		admin.GET("/statistical_data", api.GetStatisticalData)
+
 		admin.GET("/user/:uid", api.GetUser)
 		admin.PATCH("/user", api.UpdateUser)
 		admin.POST("/user/password", api.UpdateUserPwd)
