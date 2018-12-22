@@ -3,7 +3,7 @@
 body, h1, h2, h3, h4, p, ul, li {
     margin: 0; padding: 0;
 }
-ul {
+ul, ol {
     list-style: none;
 }
 a {
@@ -11,9 +11,6 @@ a {
 }
 html * {
     box-sizing: border-box;
-}
-ol li {
-    list-style: none;
 }
 
 /* common
@@ -359,18 +356,19 @@ body {
     font-size: 15px;
     line-height: 1.6;
 }
-.main-content__inner .article-detail h2 {
+.main-content__inner .article-detail h1 {
     color: #888888;
+    font-size: 24px;
     font-weight: 500;
 }
 .main-content__inner .article-detail .title-bottom {
     font-size: 14px;
-    margin-bottom: 20px;
+    margin: 0;
 }
 .main-content__inner .article-detail .image {
     width: 100%;
     max-height: 360px;
-    margin: 0 0 20px;
+    margin: 10px 0;
     overflow: hidden;
 }
 .main-content__inner .article-detail .image img {
@@ -380,8 +378,11 @@ body {
 }
 .main-content__inner .article-detail .content {
     padding-bottom: 20px;
-    margin-bottom: 20px;
+    margin: 10px 0;
     border-bottom: 1px solid #cccccc;
+}
+.main-content__inner .markdown-body {
+    padding: 0;
 }
 .main-content__inner .markdown-body .tag {
     color: #008;
@@ -393,10 +394,53 @@ body {
     margin: inherit;
     border-radius: 0;
 }
-.main-content__inner .markdown-body {
+.main-content__inner .markdown-body h1,
+.main-content__inner .markdown-body h2,
+.main-content__inner .markdown-body h3,
+.main-content__inner .markdown-body h4,
+.main-content__inner .markdown-body h5,
+.main-content__inner .markdown-body h6 {
+    position: relative;
     padding: 0;
+    margin: 10px 0;
+    font-weight: 500;
+    line-height: 1.4;
+    color: #888888;
 }
-
+.main-content__inner .markdown-body h2 {
+    font-size: 20px;
+    border: none;
+}
+.main-content__inner .markdown-body h3 {
+    font-size: 16px;
+}
+.main-content__inner .markdown-body h4 {
+    font-size: 14px;
+}
+.main-content__inner .markdown-body p {
+    margin-bottom: 10px;
+}
+.main-content__inner .markdown-body ol,
+.main-content__inner .markdown-body ul,
+.main-content__inner .markdown-body dl,
+.main-content__inner .markdown-body p,
+.main-content__inner .markdown-body pre,
+.main-content__inner .markdown-body blockquote,
+.main-content__inner .markdown-body table {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+.main-content__inner .markdown-body pre ol,
+.main-content__inner .markdown-body pre ul {
+    margin-bottom: 0;
+    list-style: initial;
+}
+.main-content__inner .markdown-body ol {
+    list-style: decimal;
+}
+.main-content__inner .markdown-body ul {
+    list-style: armenian;
+}
 /* about
 ---------------------------------------------- */
 .main-content__inner.about .introduce {

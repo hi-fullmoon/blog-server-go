@@ -32,7 +32,7 @@ func GetStatisticalData(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"code":    utils.StatusSuccess,
-		"message": "添加数据成功",
+		"message": "获取数据成功",
 		"data": map[string]int{
 			"article_total":  aCount,
 			"category_total": cCount,
