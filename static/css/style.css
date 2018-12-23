@@ -439,7 +439,7 @@ body {
     list-style: decimal;
 }
 .main-content__inner .markdown-body ul {
-    list-style: armenian;
+    list-style: disc;
 }
 /* about
 ---------------------------------------------- */

@@ -43,7 +43,7 @@ type Article struct {
 	gorm.Model
 	Title      string `gorm:"size:30"`
 	Desc       string `gorm:"size:200"`
-	Content    string `gorm:"size:6000"`
+	Content    string `gorm:"size:10000"`
 	LikeCount  int
 	ViewCount  int
 	CoverImage string
