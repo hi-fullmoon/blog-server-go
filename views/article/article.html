@@ -18,7 +18,8 @@
                 <div class="article-detail">
                     <h1>{{ .Title }}</h1>
                     <p class="title-bottom">
-                        该文章发表于 <em>{{ .CreatedAt.Format "2006/01/02" }}</em>&nbsp;&nbsp;·&nbsp;
+                        该文章发表于 <em>{{ .CreatedAt.Format "2006-01-02 15:04:05" }}</em>
+                        &nbsp;&nbsp;•&nbsp;&nbsp;
                         访问次数为 <em>{{ .ViewCount }}</em> 次
                     </p>
                     {{ if .CoverImage }}
@@ -27,13 +28,16 @@
                         </div>
                     {{ end }}
                     <div class="content">
+                        <div class="js-loading">加载中···</div>
                         <div id="editormd-view">
                             <textarea style="display:none;">{{ .Content }}</textarea>
                         </div>
                     </div>
                     <div class="content-bottom">
-                        Category：<span class="category"><a
-                                    href="/categories/{{ .Category.Name }}">{{ .Category.Name }}</a></span>&nbsp;&nbsp;·&nbsp;
+                        Category：
+                        <span class="category">
+                            <a href="/categories/{{ .Category.Name }}">{{ .Category.Name }}</a>
+                        </span>&nbsp;&nbsp;•&nbsp;
                         Tags：
                         {{ range .Tags }}
                             <span class="tag"><a href="/tags/{{ .Name }}">{{ .Name }}</a></span>
@@ -45,6 +49,8 @@
     </section>
 </section>
 
+<div class="button-go-top"><i class="icon"></i></div>
+
 {{ template "scripts"}}
 
 <script src="/static/js/marked.min.js"></script>
@@ -53,6 +59,7 @@
 <script>
     $(function () {
         editormd.markdownToHTML("editormd-view", {});
+        $('.js-loading').remove();
     });
 </script>
 </body>

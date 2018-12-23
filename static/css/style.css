@@ -229,6 +229,21 @@ body {
 .main-content__inner .article-item .image img:hover {
     transform: scale(1.1);
 }
+.main-content__inner .article-item .category-block {
+
+}
+.icon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    vertical-align: -2px;
+}
+.icon-category {
+    background: url(/static/images/icon_field.png) no-repeat center / 100%;
+}
+.icon-tag {
+    background: url(/static/images/icon_tag.png) no-repeat center / 100%;
+}
 .main-content__inner .article-item .button {
     font-size: 14px;
     float: right;
@@ -464,7 +479,18 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, .6);
+}
+.search-panel.fade {
+    animation: myAni .3s linear;
+    animation-fill-mode: forwards;
+}
+@keyframes myAni {
+    from {
+        background: rgba(0, 0, 0, 0)
+    }
+    to {
+        background: rgba(0, 0, 0, .6)
+    }
 }
 .search-panel__inner {
     margin: 100px auto 0;
@@ -519,7 +545,33 @@ body {
     font-size: 15px;
     transition: .3s all;
 }
+.search-result__item.fade a {
+    animation: .2s myAni2;
+    animation-fill-mode: forwards;
+}
+@keyframes myAni2 {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
 .search-result__item a:hover {
     background-color: #91ccff;
     color: #fff;
+}
+
+/* go scroll top
+---------------------------------------------- */
+.button-go-top {
+    position: fixed;
+    bottom: 40px;
+    right: 20px;
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+    display: block;
+    background: rgba(0,0,0,0.45) url(/static/images/go_top.png) no-repeat center / 12px 14px;
+    cursor: pointer;
 }

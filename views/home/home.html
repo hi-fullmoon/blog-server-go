@@ -28,11 +28,19 @@
                             </div>
                         {{ end }}
                     </div>
-                    <p style="height: 21px;">
-                        {{ range .Tags }}
-                            <span class="tag"><a href="/tags/{{ .Name }}">{{ .Name }}</a></span>
-                        {{ end }}
-                    </p>
+                    <div style="height: 21px;">
+                        <span class="category-block">
+                            <i class="icon icon-category"></i>
+                            <span class="category"><a href="/categories/{{ .Category.Name }}">{{ .Category.Name }}</a></span>
+                        </span>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <span class="tag-block">
+                            <i class="icon icon-tag"></i>
+                            {{ range .Tags }}
+                                <span class="tag"><a href="/tags/{{ .Name }}">{{ .Name }}</a></span>
+                            {{ end }}
+                        </span>
+                    </div>
                     <a class="button" href="/articles/{{ .ID }}">阅读全文</a>
                 </div>
             {{ end }}

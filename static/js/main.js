@@ -1,13 +1,24 @@
-$(function () {
+(function ($) {
     // loading start
     NProgress.start();
 
     // set scrollbar
-    $('body').niceScroll({cursorwidth: 8, cursorcolor: '#778886'});
+    $('body').niceScroll({
+        cursorwidth: 10,
+        cursorcolor: 'rgba(0, 0, 0, 0.45)',
+        cursorborderradius: 0,
+        cursorborder: 0
+    });
 
     // search
     $('#search-input').on('click', function () {
-        $('.js-search-panel').show();
+        $('.js-search-panel').show().addClass('fade');
+        $('.js-search-input').trigger('focus');
+    });
+
+    // go scroll top
+    $('.button-go-top').on('click', function () {
+        $("body").getNiceScroll(0).doScrollTop(0, 1);
     });
 
     // search input closed
@@ -17,6 +28,7 @@ $(function () {
         $('.js-search-result').empty();
     });
 
+    // search input
     $('.js-search-input').on('input', debounce(function () {
         getArticles();
     }, 500));
@@ -39,7 +51,7 @@ $(function () {
                     var nodeArr = [];
                     res.data.forEach(item => {
                         nodeArr.push(
-                            '<li class="search-result__item"><a href="/articles/' + item.id + '">' + item.title + '</a></li>'
+                            '<li class="search-result__item fade"><a href="/articles/' + item.id + '">' + item.title + '</a></li>'
                         )
                     });
 
@@ -55,6 +67,20 @@ $(function () {
         });
     }
 
+    function debounce(method, delay) {
+        var timer = null;
+        return function () {
+            var self = this;
+            var args = arguments;
+
+            timer && clearTimeout(timer);
+
+            timer = setTimeout(function () {
+                method.apply(self, args);
+            }, delay);
+        }
+    }
+
     // set search result container scrollbar
     $('.js-search-result').niceScroll({
         cursorwidth: 8,
@@ -68,24 +94,4 @@ $(function () {
 
     // loading done
     NProgress.done();
-});
-
-/**
- * 防抖函数
- * @param method 事件触发的操作
- * @param delay 多少毫秒内连续触发事件，不会执行
- * @returns {Function}
- */
-function debounce(method, delay) {
-    var timer = null;
-    return function () {
-        var self = this;
-        var args = arguments;
-
-        timer && clearTimeout(timer);
-
-        timer = setTimeout(function () {
-            method.apply(self, args);
-        }, delay);
-    }
-}
+})(window.jQuery);
