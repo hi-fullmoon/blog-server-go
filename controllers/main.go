@@ -10,17 +10,17 @@ import (
 )
 
 func getCount() (int, int, int) {
-	articleCount, err := models.GetArticleCount()
+	articleCount, err := models.ReadArticleCount()
 	if err != nil {
 		articleCount = 0
 	}
 
-	categoryCount, err := models.GetCategoryCount()
+	categoryCount, err := models.ReadCategoryCount()
 	if err != nil {
 		categoryCount = 0
 	}
 
-	tagCount, err := models.GetTagCount()
+	tagCount, err := models.ReadTagCount()
 	if err != nil {
 		tagCount = 0
 	}
@@ -49,7 +49,7 @@ func Home(c *gin.Context) {
 		pageSizeInt = 10
 	}
 
-	articles, total, _ := models.GetArticleList("", "", "", "", "", 0, 0, pageSizeInt, pageNoInt)
+	articles, total, _ := models.ReadArticleList("", "", "", "", "", 0, 0, pageSizeInt, pageNoInt)
 
 	var prevPageNo, nextPageNo int
 	if pageNoInt <= 0 {
@@ -79,7 +79,7 @@ func Home(c *gin.Context) {
 func CategoryList(c *gin.Context) {
 	aCount, cCount, tCount := getCount()
 
-	categoryList, _ := models.GetCategoryList("")
+	categoryList, _ := models.ReadCategoryList("")
 
 	c.HTML(http.StatusOK, "category.html", gin.H{
 		"Page":          "category",
@@ -95,7 +95,7 @@ func CategoryArticles(c *gin.Context) {
 
 	categoryName := c.Param("cName")
 
-	articles, _ := models.GetArticleListByCategoryName(categoryName)
+	articles, _ := models.ReadArticleListByCategoryName(categoryName)
 
 	c.HTML(http.StatusOK, "category-articles.html", gin.H{
 		"Page":          "category",
@@ -110,7 +110,7 @@ func CategoryArticles(c *gin.Context) {
 func TagList(c *gin.Context) {
 	aCount, cCount, tCount := getCount()
 
-	tags, _, _ := models.GetTagList("", 1000, 0)
+	tags, _, _ := models.ReadTagList("", 1000, 0)
 
 	c.HTML(http.StatusOK, "tag.html", gin.H{
 		"Page":          "tag",
@@ -126,7 +126,7 @@ func TagArticles(c *gin.Context) {
 
 	tagName := c.Param("tName")
 
-	articles, _ := models.GetArticleListByTagName(tagName)
+	articles, _ := models.ReadArticleListByTagName(tagName)
 
 	c.HTML(http.StatusOK, "tag-articles.html", gin.H{
 		"Page":          "tag",
@@ -163,7 +163,7 @@ func Article(c *gin.Context) {
 func Archive(c *gin.Context) {
 	aCount, cCount, tCount := getCount()
 
-	m, _ := models.GetArticleByGroup()
+	m, _ := models.ReadArticleByGroup()
 
 	c.HTML(http.StatusOK, "archive.html", gin.H{
 		"Page":          "archive",
@@ -199,7 +199,7 @@ func MessageBoard(c *gin.Context) {
 func GetArticlesByTitle(c *gin.Context) {
 	title := c.Query("title")
 
-	articles, err := models.GetArticleListByArticleTitle(title)
+	articles, err := models.ReadArticleListByArticleTitle(title)
 
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{

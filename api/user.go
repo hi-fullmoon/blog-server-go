@@ -22,7 +22,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	res, err := models.GetUserByAccount(user.Account)
+	res, err := models.ReadUserByAccount(user.Account)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"code":    utils.StatusFail,
@@ -75,7 +75,7 @@ func GetUser(c *gin.Context) {
 		return
 	}
 
-	user, err := models.GetUserById(uint(uidUint64))
+	user, err := models.ReadUserById(uint(uidUint64))
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"code":    utils.StatusFail,
@@ -148,7 +148,7 @@ func UpdateUserPwd(c *gin.Context) {
 	uid := body.ID
 	oldPwd := body.OldPassword
 
-	res, err := models.GetUserById(uid)
+	res, err := models.ReadUserById(uid)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"code":    utils.StatusFail,

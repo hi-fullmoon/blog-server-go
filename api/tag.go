@@ -48,24 +48,25 @@ func GetTagList(c *gin.Context) {
 	pageNum := c.Query("page_num")
 
 	pageSizeInt, err := strconv.Atoi(pageSize)
-	if err != nil {
+	if err != nil || pageSizeInt == 0 {
 		pageSizeInt = 10
 	}
+
 	pageNumInt, err := strconv.Atoi(pageNum)
-	if err != nil {
+	if err != nil || pageNumInt == 0 {
 		pageNumInt = 1
 	}
 
-	tags, total, err := models.GetTagList(name, pageSizeInt, pageNumInt)
+	tags, total, err := models.ReadTagList(name, pageSizeInt, pageNumInt)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"code":    utils.StatusFail,
 			"message": "获取标签列表失败",
 		})
+		return
 	}
 
 	var m map[string]interface{}
-
 	out := make([]map[string]interface{}, 0, 10)
 	for _, ca := range tags {
 		m = map[string]interface{}{
@@ -77,15 +78,14 @@ func GetTagList(c *gin.Context) {
 		}
 		out = append(out, m)
 	}
-
 	c.JSON(http.StatusOK, gin.H{
 		"code":    utils.StatusSuccess,
 		"message": "获取标签列表成功",
 		"data": map[string]interface{}{
-			"list":      out,
-			"total":     total,
-			"page_num":  pageNumInt,
-			"page_size": pageSizeInt,
+			"list":       out,
+			"page_total": total,
+			"page_num":   pageNumInt,
+			"page_size":  pageSizeInt,
 		},
 	})
 }

@@ -9,17 +9,17 @@ import (
 )
 
 func getCount() (int, int, int) {
-	articleCount, err := models.GetArticleCount()
+	articleCount, err := models.ReadArticleCount()
 	if err != nil {
 		articleCount = 0
 	}
 
-	categoryCount, err := models.GetCategoryCount()
+	categoryCount, err := models.ReadCategoryCount()
 	if err != nil {
 		categoryCount = 0
 	}
 
-	tagCount, err := models.GetTagCount()
+	tagCount, err := models.ReadTagCount()
 	if err != nil {
 		tagCount = 0
 	}

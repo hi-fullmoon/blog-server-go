@@ -46,7 +46,7 @@ func AddCategory(c *gin.Context) {
 
 func GetCategoryList(c *gin.Context) {
 	name := c.Query("name")
-	categories, err := models.GetCategoryList(name)
+	categories, err := models.ReadCategoryList(name)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"code":    utils.StatusFail,

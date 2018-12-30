@@ -41,13 +41,13 @@ func InitRouter() *gin.Engine {
 		admin.GET("/statistical_data", api.GetStatisticalData)
 
 		admin.GET("/user/:uid", api.GetUser)
-		admin.PATCH("/user", api.UpdateUser)
-		admin.POST("/user/password", api.UpdateUserPwd)
+		admin.PUT("/user", api.UpdateUser)
+		admin.PUT("/user/password", api.UpdateUserPwd)
 
 		admin.GET("/categories", api.GetCategoryList)
 		admin.POST("/category", api.AddCategory)
 		admin.DELETE("/category/:cid", api.DeleteCategory)
-		admin.PATCH("/category", api.UpdateCategory)
+		admin.PUT("/category", api.UpdateCategory)
 
 		admin.GET("/tags", api.GetTagList)
 		admin.POST("/tag", api.AddTag)

@@ -1,14 +1,10 @@
 package models
 
 import (
-	"fmt"
-
 	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
 
 	"log"
 	"time"
-	"zhengbiwen/blog-server/utils"
 )
 
 type User struct {
@@ -70,46 +66,8 @@ type Session struct {
 	UserID    uint
 }
 
-var (
-	db  *gorm.DB
-	err error
-)
-
-// init db
-func InitDB() (*gorm.DB, error) {
-	sec, err := utils.ConfFile.GetSection("database")
-	if err != nil {
-		log.Fatal(2, "Fail to get section `database`': %v", err)
-	}
-
-	dbType := sec.Key("DB_TYPE").String()
-	dbName := sec.Key("DB_NAME").String()
-	username := sec.Key("USERNAME").String()
-	password := sec.Key("PASSWORD").String()
-	dbHost := sec.Key("DB_HOST").String()
-	logMode, _ := sec.Key("LOG_MODE").Bool()
-
-	db, err = gorm.Open(dbType,
-		fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
-			username, password, dbHost, dbName,
-		))
-
-	if err != nil {
-		return nil, err
-	}
-
-	db.LogMode(logMode)
-
-	db.DB().SetMaxIdleConns(10)
-	db.DB().SetMaxOpenConns(100)
-
-	db.AutoMigrate(&User{}, &Category{}, &Tag{}, &Article{}, &Session{})
-
-	return db, nil
-}
-
 // get user information by username
-func GetUserByAccount(account string) (*User, error) {
+func ReadUserByAccount(account string) (*User, error) {
 	var user User
 	if err = db.Where("account = ?", account).First(&user).Error; err != nil {
 		return &user, err
@@ -118,7 +76,7 @@ func GetUserByAccount(account string) (*User, error) {
 }
 
 // get user information by user id
-func GetUserById(id uint) (*User, error) {
+func ReadUserById(id uint) (*User, error) {
 	var user User
 	if err = db.Where("id = ?", id).First(&user).Error; err != nil {
 		return &User{}, err
@@ -147,7 +105,7 @@ func UpdateUserPassword(id uint, pwd string) error {
 func CheckCategoryExistByName(name string) (*Category, bool) {
 	var category Category
 	if err = db.Where("name = ?", name).First(&category).Error; err != nil {
-		return &category, false
+		return nil, false
 	}
 	return &category, true
 }
@@ -162,16 +120,18 @@ func CreateCategory(name, desc string) error {
 }
 
 // read category list by name
-func GetCategoryList(name string) ([]*Category, error) {
+func ReadCategoryList(name string) ([]*Category, error) {
 	var categories []*Category
-	db := db
+	tx := db
 
 	if name != "" {
-		db = db.Where("name LIKE ?", "%"+name+"%")
+		tx = tx.Where("name LIKE ?", "%"+name+"%")
 	}
 
-	if err = db.Order("created_at DESC").Preload("Articles").Find(&categories).Error; err != nil {
-		return []*Category{}, err
+	tx = tx.Order("created_at DESC").Preload("Articles").Find(&categories)
+
+	if tx.Error != nil {
+		return nil, err
 	}
 
 	return categories, nil
@@ -194,14 +154,14 @@ func UpdateCategory(id uint, name, desc string) error {
 		"name": name,
 		"desc": desc,
 	})
-	if err = db.Error; err != nil {
+	if db.Error != nil {
 		return err
 	}
 	return nil
 }
 
 // get category count
-func GetCategoryCount() (int, error) {
+func ReadCategoryCount() (int, error) {
 	var count int
 	if err = db.Model(&Category{}).Count(&count).Error; err != nil {
 		return 0, err
@@ -213,7 +173,7 @@ func GetCategoryCount() (int, error) {
 func CheckTagExistByName(name string) (*Tag, bool) {
 	var tag Tag
 	if err = db.Where("name = ?", name).First(&tag).Error; err != nil {
-		return &tag, false
+		return nil, false
 	}
 	return &tag, true
 }
@@ -221,7 +181,6 @@ func CheckTagExistByName(name string) (*Tag, bool) {
 // create tag
 func CreateTag(name string) error {
 	tag := Tag{Name: name}
-
 	if err = db.Create(&tag).Error; err != nil {
 		return err
 	}
@@ -229,30 +188,22 @@ func CreateTag(name string) error {
 }
 
 // read tags by name
-func GetTagList(name string, pageSize, pageNum int) ([]*Tag, int, error) {
+func ReadTagList(name string, pageSize, pageNum int) ([]*Tag, int, error) {
 	var tags []*Tag
-	db := db
+
+	tx := db
 
 	if name != "" {
-		db = db.Where("name LIKE ?", "%"+name+"%")
-	}
-
-	if pageSize == 0 {
-		pageSize = 10
-	}
-	if pageNum == 0 {
-		pageNum = 1
+		tx = tx.Where("name LIKE ?", "%"+name+"%")
 	}
 	offset := pageSize * (pageNum - 1)
-	db = db.Limit(pageSize).Offset(offset).Preload("Articles").Order("created_at DESC").Find(&tags)
-
+	tx = tx.Limit(pageSize).Offset(offset).Preload("Articles").Order("created_at DESC").Find(&tags)
 	var pageTotal int
-	db = db.Limit(-1).Count(&pageTotal)
+	tx = tx.Limit(-1).Count(&pageTotal)
 
-	if err = db.Error; err != nil {
-		return []*Tag{}, 0, err
+	if tx.Error != nil {
+		return nil, 0, err
 	}
-
 	return tags, pageTotal, nil
 }
 
@@ -279,7 +230,7 @@ func DeleteTag(id uint) error {
 }
 
 // get tag count
-func GetTagCount() (int, error) {
+func ReadTagCount() (int, error) {
 	var count int
 	if err = db.Model(&Tag{}).Count(&count).Error; err != nil {
 		return 0, err
@@ -292,8 +243,6 @@ func CreateArticle(categoryId uint, title, desc, content, image string, tagIds [
 	var article Article
 
 	nowTime := time.Now()
-
-	fmt.Println("xxxx", nowTime.Format("2006-01"))
 
 	article = Article{
 		Title:      title,
@@ -319,12 +268,14 @@ func CreateArticle(categoryId uint, title, desc, content, image string, tagIds [
 }
 
 // read article list
-func GetArticleList(title, createdStartAt, createdEndAt, updatedStartAt, updatedEndAt string,
+func ReadArticleList(title, createdStartAt, createdEndAt, updatedStartAt, updatedEndAt string,
 	categoryId, tagId uint, pageSize, pageNum int) ([]*Article, int, error) {
 	var articles []*Article
-	db := db
+
+	tx := db
+
 	if tagId != 0 {
-		db = db.Table("tags").
+		tx = tx.Table("tags").
 			Select("articles.*").
 			Joins("INNER JOIN article_tags ON tags.id = article_tags.tag_id").
 			Joins("INNER JOIN articles ON article_tags.article_id = articles.id").
@@ -332,98 +283,87 @@ func GetArticleList(title, createdStartAt, createdEndAt, updatedStartAt, updated
 	}
 
 	if title != "" {
-		db = db.Where("articles.title LIKE ?", "%"+title+"%")
+		tx = tx.Where("articles.title LIKE ?", "%"+title+"%")
 	}
 
 	if categoryId != 0 {
-		db = db.Where("articles.category_id = ?", categoryId)
+		tx = tx.Where("articles.category_id = ?", categoryId)
 	}
 
 	if createdStartAt != "" && createdEndAt != "" {
-		db = db.Where("articles.created_at BETWEEN ? AND ?", createdStartAt, createdEndAt)
+		tx = tx.Where("articles.created_at BETWEEN ? AND ?", createdStartAt, createdEndAt)
 	}
 
 	if updatedStartAt != "" && updatedEndAt != "" {
-		db = db.Where("articles.updated_at BETWEEN ? AND ?", updatedStartAt, updatedEndAt)
+		tx = tx.Where("articles.updated_at BETWEEN ? AND ?", updatedStartAt, updatedEndAt)
 	}
 
-	if pageSize == 0 {
-		pageSize = 10
-	}
-	if pageNum == 0 {
-		pageNum = 1
-	}
 	offset := pageSize * (pageNum - 1)
-
-	db = db.Preload("Category").Preload("Tags").Order("created_at DESC").
+	tx = tx.Preload("Category").Preload("Tags").Order("created_at DESC").
 		Limit(pageSize).Offset(offset).Find(&articles)
 
 	var pageTotal int
-	db = db.Limit(-1).Count(&pageTotal)
+	tx = tx.Limit(-1).Count(&pageTotal)
 
-	if err = db.Error; err != nil {
-		return []*Article{}, 0, err
+	if err = tx.Error; err != nil {
+		return nil, 0, err
 	}
-
 	return articles, pageTotal, nil
 }
 
 // get article list by article name
-func GetArticleListByArticleTitle(articleTitle string) ([]*Article, error) {
+func ReadArticleListByArticleTitle(articleTitle string) ([]*Article, error) {
 	var articles []*Article
-	db := db
-	db = db.Where("title LIKE ?", "%"+articleTitle+"%").Select("id, title").Order("created_at DESC").Find(&articles)
 
-	if err = db.Error; err != nil {
-		return []*Article{}, err
+	tx := db
+	tx = tx.Where("title LIKE ?", "%"+articleTitle+"%").Select("id, title").Order("created_at DESC").Find(&articles)
+
+	if tx.Error != nil {
+		return nil, err
 	}
-
 	return articles, nil
 }
 
 // get article list by tag name
-func GetArticleListByTagName(tagName string) ([]*Article, error) {
+func ReadArticleListByTagName(tagName string) ([]*Article, error) {
 	var articles []*Article
-	db := db
+
+	tx := db
 	if tagName != "" {
-		db = db.Table("tags").
+		tx = tx.Table("tags").
 			Select("articles.*").
 			Joins("INNER JOIN article_tags ON tags.id = article_tags.tag_id").
 			Joins("INNER JOIN articles ON article_tags.article_id = articles.id").
 			Where("tags.name = ? AND articles.deleted_at IS NULL", tagName)
 	}
+	tx = tx.Preload("Tags").Order("created_at DESC").Find(&articles)
 
-	db = db.Preload("Tags").Order("created_at DESC").Find(&articles)
-
-	if err = db.Error; err != nil {
-		return []*Article{}, err
+	if tx.Error != nil {
+		return nil, err
 	}
-
 	return articles, nil
 }
 
 // get article list by category name
-func GetArticleListByCategoryName(categoryName string) ([]*Article, error) {
+func ReadArticleListByCategoryName(categoryName string) ([]*Article, error) {
 	var articles []*Article
-	db := db
 
-	db = db.Table("categories").
+	tx := db
+	tx = tx.Table("categories").
 		Where("name = ?", categoryName).
 		Select("articles.*").
 		Joins("INNER JOIN articles ON articles.category_id = categories.id").
 		Order("created_at DESC").
 		Find(&articles)
 
-	if err = db.Error; err != nil {
-		return []*Article{}, err
+	if tx.Error != nil {
+		return nil, err
 	}
-
 	return articles, nil
 }
 
 // get article list by group
-// TODO：need to be modified.
-func GetArticleByGroup() ([]map[string]interface{}, error) {
+func ReadArticleByGroup() ([]map[string]interface{}, error) {
 	var articles []*Article
 	var yearAt, monthAt int
 
@@ -433,7 +373,6 @@ func GetArticleByGroup() ([]map[string]interface{}, error) {
 	}
 
 	out := make([]map[string]interface{}, 0, 10)
-
 	for rows.Next() {
 		rows.Scan(&yearAt, &monthAt)
 		res := db.
@@ -470,26 +409,31 @@ func ReadArticleInfo(aid uint) (*Article, error) {
 // update article
 func UpdateArticle(aid, categoryId uint, title, desc, content, image string, tagIds []uint) error {
 	var article Article
-	res := db.Where("id = ?", aid).Model(&article).Updates(map[string]interface{}{
+	tx := db.Begin()
+
+	tx = tx.Where("id = ?", aid).Model(&article).Updates(map[string]interface{}{
 		"category_id": categoryId,
 		"title":       title,
 		"desc":        desc,
 		"content":     content,
 		"cover_image": image,
 	})
-	if err = res.Error; err != nil {
+	if err = tx.Error; err != nil {
+		tx.Rollback()
 		return err
 	}
-
-	if err = db.Exec("DELETE FROM article_tags WHERE article_id = ?", aid).Error; err != nil {
+	if err = tx.Exec("DELETE FROM article_tags WHERE article_id = ?", aid).Error; err != nil {
+		tx.Rollback()
 		return err
 	}
 	for _, tagId := range tagIds {
-		if err = db.Exec("INSERT INTO article_tags(article_id, tag_id) VALUES(?, ?)", aid, tagId).Error; err != nil {
+		if err = tx.Exec("INSERT INTO article_tags(article_id, tag_id) VALUES(?, ?)", aid, tagId).Error; err != nil {
+			tx.Rollback()
 			return err
 		}
 	}
-	return nil
+
+	return tx.Commit().Error
 }
 
 // delete article
@@ -502,7 +446,7 @@ func DeleteArticle(aid uint) error {
 }
 
 // get article count
-func GetArticleCount() (int, error) {
+func ReadArticleCount() (int, error) {
 	var count int
 	if err = db.Model(&Article{}).Count(&count).Error; err != nil {
 		return 0, err

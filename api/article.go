@@ -67,15 +67,15 @@ func GetArticleList(c *gin.Context) {
 	tidUint64, _ := strconv.ParseUint(tid, 10, 64)
 
 	pageSizeInt, err := strconv.Atoi(pageSize)
-	if err != nil {
+	if err != nil || pageSizeInt == 0 {
 		pageSizeInt = 10
 	}
 	pageNumInt, err := strconv.Atoi(pageNum)
-	if err != nil {
+	if err != nil || pageNumInt == 0 {
 		pageNumInt = 1
 	}
 
-	articles, total, err := models.GetArticleList(title, cStartAt, cEndAt, uStartAt, uEndAt,
+	articles, total, err := models.ReadArticleList(title, cStartAt, cEndAt, uStartAt, uEndAt,
 		uint(cidUint64), uint(tidUint64),
 		pageSizeInt, pageNumInt)
 	if err != nil {
@@ -87,7 +87,6 @@ func GetArticleList(c *gin.Context) {
 	}
 
 	m := make(map[string]interface{})
-
 	out := make([]map[string]interface{}, 0, 10)
 
 	for _, article := range articles {
@@ -115,10 +114,10 @@ func GetArticleList(c *gin.Context) {
 		"code":    utils.StatusSuccess,
 		"message": "获取文章列表成功",
 		"data": map[string]interface{}{
-			"list":      out,
-			"total":     total,
-			"page_num":  pageNumInt,
-			"page_size": pageSizeInt,
+			"list":       out,
+			"page_total": total,
+			"page_num":   pageNumInt,
+			"page_size":  pageSizeInt,
 		},
 	})
 }

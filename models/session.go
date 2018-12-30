@@ -18,16 +18,15 @@ func CreateSession(sid string, ttl int64, uid uint) (*Session, error) {
 		UserID:    uid,
 	}
 
-	if err := db.Create(&session).Error; err != nil {
+	if err = db.Create(&session).Error; err != nil {
 		return nil, err
 	}
-
 	return &session, nil
 }
 
 func DeleteSession(uid uint) error {
 	var se Session
-	if err := db.Where("user_id = ?", uid).Unscoped().Delete(&se).Error; err != nil {
+	if err = db.Where("user_id = ?", uid).Unscoped().Delete(&se).Error; err != nil {
 		return err
 	}
 	return nil
@@ -35,7 +34,7 @@ func DeleteSession(uid uint) error {
 
 func DeleteSessionsByTTL(ttl int64) error {
 	var ses []Session
-	if err := db.Where("ttl < ?", ttl).Unscoped().Delete(&ses).Error; err != nil {
+	if err = db.Where("ttl < ?", ttl).Unscoped().Delete(&ses).Error; err != nil {
 		return err
 	}
 	return nil
