@@ -33,7 +33,7 @@ func Home(c *gin.Context) {
 
 	pageNo := c.Query("page")
 	pageNoInt, err := strconv.Atoi(pageNo)
-	if err != nil {
+	if err != nil || pageNoInt == 0 {
 		pageNoInt = 1
 	}
 	if pageNoInt < 0 {
@@ -42,7 +42,7 @@ func Home(c *gin.Context) {
 
 	pageSize := c.Query("page_size")
 	pageSizeInt, err := strconv.Atoi(pageSize)
-	if err != nil {
+	if err != nil || pageSizeInt == 0 {
 		pageSizeInt = 10
 	}
 	if pageSizeInt > 10 {
