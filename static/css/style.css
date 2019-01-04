@@ -236,7 +236,7 @@ body {
     display: inline-block;
     width: 16px;
     height: 16px;
-    vertical-align: -2px;
+    vertical-align: -3px;
 }
 .icon-category {
     background: url(/static/images/icon_field.png) no-repeat center / 100%;

@@ -3,7 +3,6 @@ package models
 import (
 	"github.com/jinzhu/gorm"
 
-	"log"
 	"time"
 )
 
@@ -400,8 +399,7 @@ func ReadArticleByGroup() ([]map[string]interface{}, error) {
 func ReadArticleInfo(aid uint) (*Article, error) {
 	var article Article
 	if err = db.Where("id = ?", aid).Preload("Category").Preload("Tags").First(&article).Error; err != nil {
-		log.Println(err)
-		return &Article{}, err
+		return nil, err
 	}
 	return &article, nil
 }

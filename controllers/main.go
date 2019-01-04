@@ -149,7 +149,11 @@ func Article(c *gin.Context) {
 
 	models.UpdateArticleViewCount(uint(aidUint64))
 
-	article, _ := models.ReadArticleInfo(uint(aidUint64))
+	article, err := models.ReadArticleInfo(uint(aidUint64))
+	if err != nil {
+		c.String(http.StatusNotFound, "404 page not found")
+		return
+	}
 
 	c.HTML(http.StatusOK, "article.html", gin.H{
 		"Page":          "",
