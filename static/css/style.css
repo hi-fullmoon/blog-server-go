@@ -456,6 +456,9 @@ body {
 .main-content__inner .markdown-body ul {
     list-style: disc;
 }
+.main-content__inner .markdown-body code {
+    font-family: Consolas,"Courier New",monospace;
+}
 /* about
 ---------------------------------------------- */
 .main-content__inner.about .introduce {
