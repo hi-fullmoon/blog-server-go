@@ -366,7 +366,13 @@ func ReadArticleByGroup() ([]map[string]interface{}, error) {
 	var articles []*Article
 	var yearAt, monthAt int
 
-	rows, err := db.Table("articles").Select("year_at, month_at").Group("year_at, month_at").Order("year_at, month_at DESC").Rows()
+	rows, err := db.
+		Table("articles").
+		Select("year_at, month_at").
+		Group("year_at, month_at").
+		Order("year_at DESC").
+		Order("month_at DESC").
+		Rows()
 	if err = db.Error; err != nil {
 		return nil, err
 	}
