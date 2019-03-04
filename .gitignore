@@ -1,6 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 /upload/
 main
+nohup.out
 
 # dependencies
 /node_modules
@@ -30,4 +31,5 @@ yarn-error.log*
 .idea
 .vscode
 .rar
+
 
