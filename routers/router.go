@@ -52,7 +52,7 @@ func InitRouter() *gin.Engine {
 		admin.GET("/tags", api.GetTagList)
 		admin.POST("/tag", api.AddTag)
 		admin.DELETE("/tag/:tid", api.DeleteTag)
-		admin.PATCH("/tag", api.UpdateTag)
+		admin.PUT("/tag", api.UpdateTag)
 
 		admin.GET("/articles", api.GetArticleList)
 		admin.GET("/article/:aid", api.GetArticleInfo)

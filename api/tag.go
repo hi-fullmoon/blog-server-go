@@ -139,7 +139,7 @@ func UpdateTag(c *gin.Context) {
 	tid := tag.ID
 	cname := tag.Name
 
-	if res, isExist := models.CheckTagExistByName(cname); res.ID != tid && isExist {
+	if res, isExist := models.CheckTagExistByName(cname); isExist && res.ID != tid {
 		c.JSON(http.StatusOK, gin.H{
 			"code":    utils.StatusFail,
 			"message": "添加标签失败，该标签名称已经存在",

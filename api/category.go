@@ -126,7 +126,7 @@ func UpdateCategory(c *gin.Context) {
 	cname := category.Name
 	cdesc := category.Desc
 
-	if res, isExist := models.CheckCategoryExistByName(cname); res.ID != cid && isExist {
+	if res, isExist := models.CheckCategoryExistByName(cname); isExist && res.ID != cid {
 		c.JSON(http.StatusOK, gin.H{
 			"code":    utils.StatusFail,
 			"message": "添加失败，该分类名称已经存在",
